@@ -1,6 +1,6 @@
 package com.example.WorkoutTrackingApp.service;
 
-import com.example.WorkoutTrackingApp.dto.UserDto;
+import com.example.WorkoutTrackingApp.dto.UserUpdateDto;
 import com.example.WorkoutTrackingApp.entity.User;
 import com.example.WorkoutTrackingApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -56,7 +55,7 @@ public class UserServiceImp implements UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    public UserDto updateUser(Long id, UserDto userDto) {
+    public UserUpdateDto updateUser(Long id, UserUpdateDto userDto) {
         User user = userRepository.findById(id)
                 .orElse(new User());
 
@@ -71,8 +70,8 @@ public class UserServiceImp implements UserService {
         // Convert to DTO and return
         return mapToDto(updatedUser);
     }
-    private UserDto mapToDto(User user) {
-        UserDto dto = new UserDto();
+    private UserUpdateDto mapToDto(User user) {
+        UserUpdateDto dto = new UserUpdateDto();
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());

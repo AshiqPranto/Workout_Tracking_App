@@ -3,7 +3,7 @@ package com.example.WorkoutTrackingApp.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class UserDto {
+public class UserUpdateDto {
 
     private Long id;
 

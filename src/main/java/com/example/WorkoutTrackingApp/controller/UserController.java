@@ -1,17 +1,14 @@
 package com.example.WorkoutTrackingApp.controller;
 
-import com.example.WorkoutTrackingApp.dto.UserDto;
+import com.example.WorkoutTrackingApp.dto.UserUpdateDto;
 import com.example.WorkoutTrackingApp.entity.User;
 import com.example.WorkoutTrackingApp.service.UserServiceImp;
 //import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -56,10 +53,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(
+    public ResponseEntity<UserUpdateDto> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserDto userDto) {
-        UserDto updatedUser = userService.updateUser(id, userDto);
+            @Valid @RequestBody UserUpdateDto userDto) {
+        UserUpdateDto updatedUser = userService.updateUser(id, userDto);
         return ResponseEntity.ok(updatedUser);
     }
 
