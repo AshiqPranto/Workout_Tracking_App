@@ -44,7 +44,7 @@ public class UserServiceImp implements UserService {
         catch(Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(Map.of("message: ", "Detele Successfully"), HttpStatus.OK)  ;
+        return new ResponseEntity<>(Map.of("message: ", "Detele Successfully"), HttpStatus.OK);
     }
 
     public User findUserByEmail(String email) {
