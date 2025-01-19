@@ -74,7 +74,8 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isActive;
+//        return isActive;
+        return true;
     }
 
     public void setPassword(String password) {
