@@ -23,14 +23,14 @@ public class DemoController {
     private final AuthenticationServiceImp service;
 
     @GetMapping("/demo")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> register( ) {
         var x = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>("Demo", HttpStatus.OK);
     }
 
     @GetMapping("/debug")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> debugEndpoint() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
