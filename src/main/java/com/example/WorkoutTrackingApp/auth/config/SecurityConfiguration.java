@@ -5,6 +5,7 @@ import com.example.WorkoutTrackingApp.auth.config.JwtAuthenticationFilter;
 import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +38,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/admin").hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/api/v1/user").hasAuthority(Role.USER.name())
                 .requestMatchers("/api/v1/userandadmin").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                .requestMatchers(HttpMethod.POST, "/api/v1/exercises").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
