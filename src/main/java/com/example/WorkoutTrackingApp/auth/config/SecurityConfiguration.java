@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable()) // Updated syntax for disabling CSRF
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/swagger-ui/index.html").permitAll()
                 .requestMatchers("/api/v1/admin").hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/api/v1/user").hasAuthority(Role.USER.name())
                 .requestMatchers("/api/v1/userandadmin").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
