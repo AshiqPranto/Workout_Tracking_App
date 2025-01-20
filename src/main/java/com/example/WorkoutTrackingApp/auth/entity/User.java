@@ -1,12 +1,12 @@
-package com.example.WorkoutTrackingApp.entity;
+package com.example.WorkoutTrackingApp.auth.entity;
 
+import com.example.WorkoutTrackingApp.auth.Enum.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import com.example.WorkoutTrackingApp.Enum.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,9 @@
-package com.example.WorkoutTrackingApp.controller;
+package com.example.WorkoutTrackingApp.auth.controller;
 
-import com.example.WorkoutTrackingApp.dto.UserUpdateDto;
-import com.example.WorkoutTrackingApp.entity.User;
-import com.example.WorkoutTrackingApp.service.UserServiceImp;
 //import jakarta.validation.Valid;
+import com.example.WorkoutTrackingApp.auth.dto.UserUpdateDto;
+import com.example.WorkoutTrackingApp.auth.entity.User;
+import com.example.WorkoutTrackingApp.auth.service.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

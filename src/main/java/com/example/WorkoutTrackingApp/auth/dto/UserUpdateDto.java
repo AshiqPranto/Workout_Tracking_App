@@ -1,4 +1,4 @@
-package com.example.WorkoutTrackingApp.dto;
+package com.example.WorkoutTrackingApp.auth.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

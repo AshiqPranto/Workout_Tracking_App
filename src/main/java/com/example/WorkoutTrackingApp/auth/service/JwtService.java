@@ -1,4 +1,4 @@
-package com.example.WorkoutTrackingApp.config;
+package com.example.WorkoutTrackingApp.auth.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

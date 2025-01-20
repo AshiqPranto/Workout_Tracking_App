@@ -1,8 +1,8 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.auth.service;
 
-import com.example.WorkoutTrackingApp.dto.UserUpdateDto;
-import com.example.WorkoutTrackingApp.entity.User;
-import com.example.WorkoutTrackingApp.repository.UserRepository;
+import com.example.WorkoutTrackingApp.auth.dto.UserUpdateDto;
+import com.example.WorkoutTrackingApp.auth.entity.User;
+import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

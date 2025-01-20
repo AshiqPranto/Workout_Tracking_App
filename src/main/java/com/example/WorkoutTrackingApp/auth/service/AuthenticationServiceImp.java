@@ -1,12 +1,12 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.auth.service;
 
-import com.example.WorkoutTrackingApp.Enum.Role;
-import com.example.WorkoutTrackingApp.config.AuthenticationRequest;
-import com.example.WorkoutTrackingApp.config.JwtService;
-import com.example.WorkoutTrackingApp.config.RegisterRequest;
-import com.example.WorkoutTrackingApp.dto.AuthenticationResponse;
-import com.example.WorkoutTrackingApp.entity.User;
-import com.example.WorkoutTrackingApp.repository.UserRepository;
+import com.example.WorkoutTrackingApp.auth.Enum.Role;
+import com.example.WorkoutTrackingApp.auth.dto.AuthenticationRequest;
+import com.example.WorkoutTrackingApp.auth.dto.AuthenticationResponse;
+import com.example.WorkoutTrackingApp.auth.entity.User;
+import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
+import com.example.WorkoutTrackingApp.auth.service.JwtService;
+import com.example.WorkoutTrackingApp.auth.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

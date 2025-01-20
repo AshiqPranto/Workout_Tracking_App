@@ -1,15 +1,12 @@
-package com.example.WorkoutTrackingApp.controller;
+package com.example.WorkoutTrackingApp.auth.controller;
 
-import com.example.WorkoutTrackingApp.config.AuthenticationRequest;
-import com.example.WorkoutTrackingApp.config.RegisterRequest;
-import com.example.WorkoutTrackingApp.dto.AuthenticationResponse;
-import com.example.WorkoutTrackingApp.service.AuthenticationServiceImp;
+import com.example.WorkoutTrackingApp.auth.dto.AuthenticationRequest;
+import com.example.WorkoutTrackingApp.auth.dto.AuthenticationResponse;
+import com.example.WorkoutTrackingApp.auth.dto.RegisterRequest;
+import com.example.WorkoutTrackingApp.auth.service.AuthenticationServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")

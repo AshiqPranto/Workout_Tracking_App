@@ -1,5 +1,6 @@
-package com.example.WorkoutTrackingApp.config;
+package com.example.WorkoutTrackingApp.auth.config;
 
+import com.example.WorkoutTrackingApp.auth.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

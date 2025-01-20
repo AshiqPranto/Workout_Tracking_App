@@ -1,4 +1,4 @@
-package com.example.WorkoutTrackingApp.config;
+package com.example.WorkoutTrackingApp.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

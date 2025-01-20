@@ -1,6 +1,6 @@
-package com.example.WorkoutTrackingApp.repository;
+package com.example.WorkoutTrackingApp.auth.repository;
 
-import com.example.WorkoutTrackingApp.entity.User;
+import com.example.WorkoutTrackingApp.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,7 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.auth.service;
 
-import com.example.WorkoutTrackingApp.dto.UserUpdateDto;
-import com.example.WorkoutTrackingApp.entity.User;
+import com.example.WorkoutTrackingApp.auth.dto.UserUpdateDto;
+import com.example.WorkoutTrackingApp.auth.entity.User;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

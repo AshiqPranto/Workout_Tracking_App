@@ -1,8 +1,8 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.auth.service;
 
-import com.example.WorkoutTrackingApp.config.AuthenticationRequest;
-import com.example.WorkoutTrackingApp.config.RegisterRequest;
-import com.example.WorkoutTrackingApp.dto.AuthenticationResponse;
+import com.example.WorkoutTrackingApp.auth.dto.AuthenticationRequest;
+import com.example.WorkoutTrackingApp.auth.dto.AuthenticationResponse;
+import com.example.WorkoutTrackingApp.auth.dto.RegisterRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface AuthenticationService {
