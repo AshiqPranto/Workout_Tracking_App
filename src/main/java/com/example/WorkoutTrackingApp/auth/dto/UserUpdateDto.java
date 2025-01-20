@@ -1,7 +1,8 @@
 package com.example.WorkoutTrackingApp.auth.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public class UserUpdateDto {
 
