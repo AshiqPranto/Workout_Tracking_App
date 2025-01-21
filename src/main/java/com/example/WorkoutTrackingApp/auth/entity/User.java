@@ -7,14 +7,12 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Data
 @Entity
 @Builder
 @NoArgsConstructor
@@ -48,10 +46,6 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     @Override
     public String getUsername() {
         return email;
@@ -74,50 +68,11 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-//        return isActive;
         return true;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public boolean getIsActive() {
         return isActive;
-    }
-
-    public void setIsActive(boolean active) {
-        isActive = active;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     private LocalDateTime updatedAt;
