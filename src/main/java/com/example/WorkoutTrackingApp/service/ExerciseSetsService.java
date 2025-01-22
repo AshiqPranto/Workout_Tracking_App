@@ -10,6 +10,7 @@ public interface ExerciseSetsService {
     List<ExerciseSets> getAllExerciseSets();
     List<ExerciseSets> getExerciseSetsByExerciseId(Integer exerciseId);
     List<ExerciseSets> getExerciseSetsByWorkoutId(Integer workoutId);
+    List<ExerciseSets> getExerciseSetsByUserId(Integer userId);
     ExerciseSets updateExerciseSet(Integer id, ExerciseSets updatedExerciseSet);
     void deleteExerciseSet(Integer id);
 }

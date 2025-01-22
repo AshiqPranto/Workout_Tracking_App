@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/admin").hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/api/v1/user").hasAuthority(Role.USER.name())
                 .requestMatchers("/api/v1/userandadmin").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
-                .requestMatchers(HttpMethod.POST, "/api/v1/exercises").hasAuthority(Role.ADMIN.name())
+//                .requestMatchers(HttpMethod.POST, "/api/v1/exercises").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

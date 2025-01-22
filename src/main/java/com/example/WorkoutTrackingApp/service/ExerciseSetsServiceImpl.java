@@ -41,6 +41,11 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
     }
 
     @Override
+    public List<ExerciseSets> getExerciseSetsByUserId(Integer userId) {
+        return exerciseSetsRepository.findAllByUserId(userId);
+    }
+
+    @Override
     public ExerciseSets updateExerciseSet(Integer id, ExerciseSets updatedExerciseSet) {
         ExerciseSets existingExerciseSet = getExerciseSetById(id);
         existingExerciseSet.setReps(updatedExerciseSet.getReps());

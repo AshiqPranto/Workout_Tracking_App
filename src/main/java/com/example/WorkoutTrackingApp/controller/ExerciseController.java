@@ -21,7 +21,7 @@ public class ExerciseController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Exercise> createExercise(@RequestBody Exercise exercise) {
         return ResponseEntity.ok(exerciseService.createExercise(exercise));
     }
@@ -37,7 +37,7 @@ public class ExerciseController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Exercise> updateExercise(
             @PathVariable Integer id, 
             @RequestBody Exercise exercise) {

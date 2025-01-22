@@ -1,5 +1,7 @@
 package com.example.WorkoutTrackingApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -30,10 +32,12 @@ public class ExerciseSets {
     private Integer weights;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JsonBackReference
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JsonBackReference
     @JoinColumn(name = "workout_id", nullable = false)
     private Workout workout;
 

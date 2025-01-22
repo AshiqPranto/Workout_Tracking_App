@@ -62,8 +62,8 @@ public class UserServiceImp implements UserService {
         // Update fields
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setIsActive(userDto.isActive());
-
+//        user.setIsActive(userDto.isActive());
+        user.setActive(userDto.isActive());
         // Save updated user
         User updatedUser = userRepository.save(user);
 

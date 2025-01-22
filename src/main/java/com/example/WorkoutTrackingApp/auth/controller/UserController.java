@@ -26,17 +26,17 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getAll());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User result = userService.findUserById(id);
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<?> findUserByEmail(@PathVariable String email) {
-        User result = userService.findUserByEmail(email);
-        return ResponseEntity.ok().body(result);
-    }
+//    @GetMapping("/{email}")
+//    public ResponseEntity<?> findUserByEmail(@PathVariable String email) {
+//        User result = userService.findUserByEmail(email);
+//        return ResponseEntity.ok().body(result);
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {

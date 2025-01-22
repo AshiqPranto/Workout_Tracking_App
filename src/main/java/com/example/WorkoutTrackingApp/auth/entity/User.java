@@ -1,6 +1,8 @@
 package com.example.WorkoutTrackingApp.auth.entity;
 
 import com.example.WorkoutTrackingApp.auth.Enum.Role;
+import com.example.WorkoutTrackingApp.entity.Workout;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -37,6 +39,10 @@ public class User implements UserDetails {
 
     @Column(name = "is_active")
     private boolean isActive = true; // For enabling/disabling user accounts
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Workout> workouts;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;

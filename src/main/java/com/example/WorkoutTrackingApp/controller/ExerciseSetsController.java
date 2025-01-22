@@ -41,6 +41,11 @@ public class ExerciseSetsController {
         return ResponseEntity.ok(exerciseSetsService.getExerciseSetsByWorkoutId(workoutId));
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<ExerciseSets>> getExerciseSetsByUserId(@PathVariable Integer id) {
+        return new ResponseEntity<>(exerciseSetsService.getExerciseSetsByUserId(id), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ExerciseSets> updateExerciseSet(
             @PathVariable Integer id,
