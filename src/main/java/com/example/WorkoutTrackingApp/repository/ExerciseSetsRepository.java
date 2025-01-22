@@ -14,4 +14,9 @@ public interface ExerciseSetsRepository extends JpaRepository<ExerciseSets, Inte
     List<ExerciseSets> findByWorkoutId(Integer workoutId);
     @Query("SELECT es FROM ExerciseSets es WHERE es.workout.user.id = :userId")
     List<ExerciseSets> findAllByUserId(@Param("userId") Integer userId);
+    @Query("SELECT es FROM ExerciseSets es " +
+            "WHERE es.exercise.id = :exerciseId AND es.workout.user.id = :userId")
+    List<ExerciseSets> findAllByExerciseIdAndUserId(@Param("exerciseId") Integer exerciseId,
+                                                 @Param("userId") Integer userId);
+
 }

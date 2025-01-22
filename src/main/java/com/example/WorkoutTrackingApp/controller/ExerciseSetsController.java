@@ -46,6 +46,15 @@ public class ExerciseSetsController {
         return new ResponseEntity<>(exerciseSetsService.getExerciseSetsByUserId(id), HttpStatus.OK);
     }
 
+    @GetMapping("/exercise/{exerciseId}/user/{userId}")
+    public ResponseEntity<List<ExerciseSets>> getExerciseSetsByExerciseAndUser(
+            @PathVariable Integer exerciseId,
+            @PathVariable Integer userId) {
+        List<ExerciseSets> exerciseSets = exerciseSetsService.getAllByExerciseIdAndUserId(exerciseId, userId);
+//        return ResponseEntity.ok(exerciseSets);
+        return new ResponseEntity<>(exerciseSets, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ExerciseSets> updateExerciseSet(
             @PathVariable Integer id,

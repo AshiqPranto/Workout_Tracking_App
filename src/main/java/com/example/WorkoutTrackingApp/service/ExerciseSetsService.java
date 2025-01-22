@@ -11,6 +11,7 @@ public interface ExerciseSetsService {
     List<ExerciseSets> getExerciseSetsByExerciseId(Integer exerciseId);
     List<ExerciseSets> getExerciseSetsByWorkoutId(Integer workoutId);
     List<ExerciseSets> getExerciseSetsByUserId(Integer userId);
+    List<ExerciseSets> getAllByExerciseIdAndUserId(Integer exerciseId, Integer userId);
     ExerciseSets updateExerciseSet(Integer id, ExerciseSets updatedExerciseSet);
     void deleteExerciseSet(Integer id);
 }
