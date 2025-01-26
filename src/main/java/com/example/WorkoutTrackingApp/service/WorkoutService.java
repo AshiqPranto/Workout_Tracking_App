@@ -9,6 +9,7 @@ public interface WorkoutService {
     Workout getWorkoutById(Integer id);
     List<Workout> getAllWorkouts();
     List<Workout> getWorkoutsByUserId(Integer userId);
+    List<Workout> getAllWorkoutsByExerciseId(Integer exerciseId);
     Workout updateWorkout(Integer id, Workout updatedWorkout);
     void deleteWorkout(Integer id);
 }

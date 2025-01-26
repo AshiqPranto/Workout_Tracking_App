@@ -3,6 +3,7 @@ package com.example.WorkoutTrackingApp.controller;
 import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.service.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Exercise> createExercise(@RequestBody Exercise exercise) {
         return ResponseEntity.ok(exerciseService.createExercise(exercise));

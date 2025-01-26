@@ -36,6 +36,12 @@ public class WorkoutController {
         return ResponseEntity.ok(workoutService.getWorkoutsByUserId(userId));
     }
 
+    @GetMapping("/exercise/{exerciseId}")
+    public ResponseEntity<List<Workout>> getWorkoutsByExerciseId(@PathVariable Integer exerciseId) {
+        List<Workout> workouts = workoutService.getAllWorkoutsByExerciseId(exerciseId);
+        return ResponseEntity.ok(workouts);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Workout> updateWorkout(
             @PathVariable Integer id,

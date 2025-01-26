@@ -36,6 +36,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
+    public List<Workout> getAllWorkoutsByExerciseId(Integer exerciseId) {
+        return workoutRepository.findAllWorkoutsByExerciseId(exerciseId);
+    }
+
+    @Override
     public Workout updateWorkout(Integer id, Workout updatedWorkout) {
         Workout existingWorkout = getWorkoutById(id);
         existingWorkout.setName(updatedWorkout.getName());
