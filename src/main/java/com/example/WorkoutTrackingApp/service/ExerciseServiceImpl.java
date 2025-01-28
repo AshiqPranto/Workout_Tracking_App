@@ -1,11 +1,16 @@
 package com.example.WorkoutTrackingApp.service;
 
+import com.example.WorkoutTrackingApp.dto.ExerciseDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
+import com.example.WorkoutTrackingApp.entity.ExerciseSets;
 import com.example.WorkoutTrackingApp.repository.ExerciseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
@@ -18,14 +23,42 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public Exercise createExercise(Exercise exercise) {
-        return exerciseRepository.save(exercise);
+    public ResponseEntity<?> createExercise(ExerciseDTO exerciseDTO)
+    {
+        try{
+            Exercise exercise = convertToEntity(exerciseDTO);
+            Exercise savedExercise = exerciseRepository.save(exercise);
+            return new ResponseEntity<>(savedExercise, HttpStatus.CREATED);
+        }
+        catch(Exception e){
+//            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    private Exercise convertToEntity(ExerciseDTO exerciseDTO)
+    {
+        return Exercise.builder()
+                .name(exerciseDTO.getName())
+                .category(exerciseDTO.getCategory())
+                .instructions(exerciseDTO.getInstructions())
+                .animationUrl(exerciseDTO.getAnimationUrl())
+                .bodyPart(exerciseDTO.getBodyPart())
+                .exerciseSets(List.of())
+                .build();
     }
 
     @Override
-    public Exercise getExerciseById(Integer id) {
-        return exerciseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Exercise not found with ID: " + id));
+    public ResponseEntity<?> getExerciseById(Integer id) {
+        try{
+            Optional<Exercise> exercise = exerciseRepository.findById(id);
+            return new ResponseEntity<>(exercise.get(), HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
@@ -34,19 +67,19 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public Exercise updateExercise(Integer id, Exercise exercise) {
-        Exercise existingExercise = getExerciseById(id); // Will throw an exception if not found
-        existingExercise.setName(exercise.getName());
-        existingExercise.setCategory(exercise.getCategory());
-        existingExercise.setInstructions(exercise.getInstructions());
-        existingExercise.setAnimationUrl(exercise.getAnimationUrl());
-        existingExercise.setBodyPart(exercise.getBodyPart());
+    public Exercise updateExercise(Integer id, ExerciseDTO exerciseDTO) {
+        Exercise existingExercise = exerciseRepository.findById(id).get(); // Will throw an exception if not found
+        existingExercise.setName(exerciseDTO.getName());
+        existingExercise.setCategory(exerciseDTO.getCategory());
+        existingExercise.setInstructions(exerciseDTO.getInstructions());
+        existingExercise.setAnimationUrl(exerciseDTO.getAnimationUrl());
+        existingExercise.setBodyPart(exerciseDTO.getBodyPart());
         return exerciseRepository.save(existingExercise);
     }
 
     @Override
     public void deleteExercise(Integer id) {
-        Exercise exercise = getExerciseById(id); // Will throw an exception if not found
+        Exercise exercise = exerciseRepository.findById(id).get(); // Will throw an exception if not found
         exerciseRepository.delete(exercise);
     }
 }
