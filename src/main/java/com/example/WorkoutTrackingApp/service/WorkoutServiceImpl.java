@@ -1,11 +1,18 @@
 package com.example.WorkoutTrackingApp.service;
 
+import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
+import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
+import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.jdbc.Work;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -13,10 +20,28 @@ import java.util.List;
 public class WorkoutServiceImpl implements WorkoutService {
 
     private final WorkoutRepository workoutRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public Workout createWorkout(Workout workout) {
-        return workoutRepository.save(workout);
+    public ResponseEntity<?> createWorkout(WorkoutDTO workoutDTO) {
+        try {
+            Workout workout = convertToEntity(workoutDTO);
+            workout = workoutRepository.save(workout);
+            return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private Workout convertToEntity(WorkoutDTO workoutDTO) {
+        Workout workout = Workout.builder()
+                .name(workoutDTO.getName())
+                .startTime(LocalDateTime.now())
+                .user(userRepository.findById(workoutDTO.getUserId()).get())
+                .exerciseSets(List.of())
+                .build();
+        return workout;
     }
 
     @Override
@@ -41,13 +66,16 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public Workout updateWorkout(Integer id, Workout updatedWorkout) {
-        Workout existingWorkout = getWorkoutById(id);
-        existingWorkout.setName(updatedWorkout.getName());
-        existingWorkout.setStartTime(updatedWorkout.getStartTime());
-        existingWorkout.setEndTime(updatedWorkout.getEndTime());
-        existingWorkout.setUser(updatedWorkout.getUser());
-        return workoutRepository.save(existingWorkout);
+    public ResponseEntity<?> updateWorkout(Integer id, UpdateWorkoutDTO updateWorkoutDTO) {
+        try {
+            Workout existingWorkout = getWorkoutById(id);
+            existingWorkout.setName(updateWorkoutDTO.getName());
+            existingWorkout.setEndTime(updateWorkoutDTO.getEndTime());
+            Workout workout = workoutRepository.save(existingWorkout);
+            return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override

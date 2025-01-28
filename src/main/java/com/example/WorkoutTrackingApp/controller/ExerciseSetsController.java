@@ -1,5 +1,6 @@
 package com.example.WorkoutTrackingApp.controller;
 
+import com.example.WorkoutTrackingApp.dto.ExerciseSetDTO;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
 import com.example.WorkoutTrackingApp.service.ExerciseSetsService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,10 @@ public class ExerciseSetsController {
     private final ExerciseSetsService exerciseSetsService;
 
     @PostMapping
-    public ResponseEntity<ExerciseSets> createExerciseSet(@RequestBody ExerciseSets exerciseSets) {
-        return new ResponseEntity<>(exerciseSetsService.createExerciseSet(exerciseSets), HttpStatus.CREATED);
+    public ResponseEntity<?> createExerciseSet(@RequestBody ExerciseSetDTO exerciseSetDTO) {
+//        return new ResponseEntity<>(exerciseSetsService.createExerciseSet(exerciseSets), HttpStatus.CREATED);
+        ResponseEntity<?> responseEntity = exerciseSetsService.createExerciseSet(exerciseSetDTO);
+        return responseEntity;
     }
 
     @GetMapping("/{id}")
@@ -56,10 +59,11 @@ public class ExerciseSetsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ExerciseSets> updateExerciseSet(
+    public ResponseEntity<?> updateExerciseSet(
             @PathVariable Integer id,
-            @RequestBody ExerciseSets updatedExerciseSet) {
-        return ResponseEntity.ok(exerciseSetsService.updateExerciseSet(id, updatedExerciseSet));
+            @RequestBody ExerciseSetDTO exerciseSetDTO) {
+        ResponseEntity<?> responseEntity = exerciseSetsService.updateExerciseSet(id, exerciseSetDTO);
+        return responseEntity;
     }
 
     @DeleteMapping("/{id}")

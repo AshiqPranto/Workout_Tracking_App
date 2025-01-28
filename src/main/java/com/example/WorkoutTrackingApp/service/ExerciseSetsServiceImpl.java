@@ -1,9 +1,17 @@
 package com.example.WorkoutTrackingApp.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.example.WorkoutTrackingApp.dto.ExerciseSetDTO;
+import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
+import com.example.WorkoutTrackingApp.entity.Workout;
+import com.example.WorkoutTrackingApp.repository.ExerciseRepository;
 import com.example.WorkoutTrackingApp.repository.ExerciseSetsRepository;
+import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +21,35 @@ import java.util.List;
 public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
     private final ExerciseSetsRepository exerciseSetsRepository;
+    private final ExerciseRepository exerciseRepository;
+    private final WorkoutRepository workoutRepository;
 
     @Override
-    public ExerciseSets createExerciseSet(ExerciseSets exerciseSets) {
-        return exerciseSetsRepository.save(exerciseSets);
+    public ResponseEntity<?> createExerciseSet(ExerciseSetDTO exerciseSetDTO) {
+//        return exerciseSetsRepository.save(exerciseSets);
+        try{
+            ExerciseSets exerciseSets = convertToEntity(exerciseSetDTO);
+            ExerciseSets savedExerciseSets = exerciseSetsRepository.save(exerciseSets);
+            return new ResponseEntity<>(savedExerciseSets, HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+//            System.out.println(e.getMessage());
+        }
+
+
+    }
+
+    private ExerciseSets convertToEntity(ExerciseSetDTO exerciseSetDTO) {
+        Exercise exercise = exerciseRepository.findById(exerciseSetDTO.getExerciseId()).get();
+        Workout workout = workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get();
+        ExerciseSets exerciseSets = ExerciseSets.builder()
+                .reps(exerciseSetDTO.getReps())
+                .weights(exerciseSetDTO.getWeights())
+                .exercise(exercise)
+                .workout(workout)
+                .build();
+        return exerciseSets;
     }
 
     @Override
@@ -51,13 +84,20 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
     }
 
     @Override
-    public ExerciseSets updateExerciseSet(Integer id, ExerciseSets updatedExerciseSet) {
-        ExerciseSets existingExerciseSet = getExerciseSetById(id);
-        existingExerciseSet.setReps(updatedExerciseSet.getReps());
-        existingExerciseSet.setWeights(updatedExerciseSet.getWeights());
-        existingExerciseSet.setExercise(updatedExerciseSet.getExercise());
-        existingExerciseSet.setWorkout(updatedExerciseSet.getWorkout());
-        return exerciseSetsRepository.save(existingExerciseSet);
+    public ResponseEntity<?> updateExerciseSet(Integer id, ExerciseSetDTO exerciseSetDTO) {
+        try{
+            ExerciseSets existingExerciseSet = getExerciseSetById(id);
+            existingExerciseSet.setReps(exerciseSetDTO.getReps());
+            existingExerciseSet.setWeights(exerciseSetDTO.getWeights());
+            existingExerciseSet.setExercise(exerciseRepository.findById(exerciseSetDTO.getExerciseId()).get());
+            existingExerciseSet.setWorkout(workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get());
+            ExerciseSets exerciseSets = exerciseSetsRepository.save(existingExerciseSet);
+            return new ResponseEntity<>(exerciseSets, HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override

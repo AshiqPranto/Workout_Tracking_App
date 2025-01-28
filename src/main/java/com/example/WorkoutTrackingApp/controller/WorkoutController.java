@@ -1,5 +1,7 @@
 package com.example.WorkoutTrackingApp.controller;
 
+import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
+import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,9 @@ public class WorkoutController {
     private final WorkoutService workoutService;
 
     @PostMapping
-    public ResponseEntity<Workout> createWorkout(@RequestBody Workout workout) {
-        return new ResponseEntity<>(workoutService.createWorkout(workout), HttpStatus.CREATED);
+    public ResponseEntity<?> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
+        ResponseEntity<?> responseEntity = workoutService.createWorkout(workoutDTO);
+        return responseEntity;
     }
 
     @GetMapping("/{id}")
@@ -43,10 +46,11 @@ public class WorkoutController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Workout> updateWorkout(
+    public ResponseEntity<?> updateWorkout(
             @PathVariable Integer id,
-            @RequestBody Workout updatedWorkout) {
-        return ResponseEntity.ok(workoutService.updateWorkout(id, updatedWorkout));
+            @RequestBody UpdateWorkoutDTO updateWorkoutDTO) {
+        ResponseEntity<?> responseEntity = workoutService.updateWorkout(id, updateWorkoutDTO);
+        return responseEntity;
     }
 
     @DeleteMapping("/{id}")

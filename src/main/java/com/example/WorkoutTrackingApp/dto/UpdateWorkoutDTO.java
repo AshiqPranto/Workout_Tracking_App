@@ -3,11 +3,11 @@ package com.example.WorkoutTrackingApp.dto;
 import lombok.Builder;
 import lombok.Data;
 
-@Data
+import java.time.LocalDateTime;
+
 @Builder
-public class WorkoutDTO {
-
+@Data
+public class UpdateWorkoutDTO {
     private String name;
-    private Long userId;
-
+    private LocalDateTime endTime;
 }
