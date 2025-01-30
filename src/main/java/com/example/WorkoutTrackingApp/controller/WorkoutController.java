@@ -44,6 +44,7 @@ public class WorkoutController {
         List<Workout> workouts = workoutService.getAllWorkoutsByExerciseId(exerciseId);
         return ResponseEntity.ok(workouts);
     }
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateWorkout(
