@@ -52,7 +52,7 @@ public class ExerciseController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteExercise(@PathVariable Integer id) {
         exerciseService.deleteExercise(id);
         return ResponseEntity.noContent().build();
