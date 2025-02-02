@@ -1,10 +1,13 @@
 package com.example.WorkoutTrackingApp.service;
 
+import com.example.WorkoutTrackingApp.auth.entity.User;
 import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
+import com.example.WorkoutTrackingApp.auth.service.JwtService;
 import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
 import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
+import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.jdbc.Work;
@@ -21,6 +24,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     private final WorkoutRepository workoutRepository;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     @Override
     public ResponseEntity<?> createWorkout(WorkoutDTO workoutDTO) {
@@ -35,10 +39,15 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     private Workout convertToEntity(WorkoutDTO workoutDTO) {
+        String userName = AuthUtil.getAuthenticatedUserName();
+        if(userName == null) {
+            throw new RuntimeException("User is not authenticated");
+        }
+        User user = userRepository.findByEmail(userName).get();
         Workout workout = Workout.builder()
                 .name(workoutDTO.getName())
                 .startTime(LocalDateTime.now())
-                .user(userRepository.findById(workoutDTO.getUserId()).get())
+                .user(user)
                 .exerciseSets(List.of())
                 .build();
         return workout;
