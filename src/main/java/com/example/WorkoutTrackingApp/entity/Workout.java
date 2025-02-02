@@ -44,6 +44,9 @@ public class    Workout {
     @JsonManagedReference
     private List<ExerciseSets> exerciseSets;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
