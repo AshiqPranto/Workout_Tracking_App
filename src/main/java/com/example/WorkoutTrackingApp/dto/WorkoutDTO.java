@@ -8,6 +8,5 @@ import lombok.Data;
 public class WorkoutDTO {
 
     private String name;
-    private Long userId;
 
 }
