@@ -63,7 +63,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public List<Exercise> getAllExercises() {
-        return exerciseRepository.findAll();
+        return exerciseRepository.findAllByIsDeletedFalse();
     }
 
     @Override
@@ -80,6 +80,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public void deleteExercise(Integer id) {
         Exercise exercise = exerciseRepository.findById(id).get(); // Will throw an exception if not found
-        exerciseRepository.delete(exercise);
+        exercise.setDeleted(true);
+        exerciseRepository.save(exercise);
     }
 }
