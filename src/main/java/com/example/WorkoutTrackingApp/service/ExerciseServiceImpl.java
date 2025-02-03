@@ -52,7 +52,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public ResponseEntity<?> getExerciseById(Integer id) {
         try{
-            Optional<Exercise> exercise = exerciseRepository.findById(id);
+            Optional<Exercise> exercise = exerciseRepository.findByIdAndIsDeletedFalse(id);
             return new ResponseEntity<>(exercise.get(), HttpStatus.OK);
         }
         catch(Exception e){
