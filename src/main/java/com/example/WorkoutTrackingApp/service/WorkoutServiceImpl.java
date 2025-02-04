@@ -55,8 +55,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public Workout getWorkoutById(Integer id) {
-        return workoutRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Workout not found with id: " + id));
+//        return workoutRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("Workout not found with id: " + id));
+        return workoutRepository.findByIdAndIsDeletedFalse(id).get();
     }
 
     @Override
