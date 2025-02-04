@@ -44,12 +44,10 @@ public class WorkoutController {
         List<Workout> workouts = workoutService.getAllWorkoutsByExerciseId(exerciseId);
         return ResponseEntity.ok(workouts);
     }
-    
+
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateWorkout(
-            @PathVariable Integer id,
-            @RequestBody UpdateWorkoutDTO updateWorkoutDTO) {
+    public ResponseEntity<?> updateWorkout(@PathVariable Integer id, @RequestBody UpdateWorkoutDTO updateWorkoutDTO) {
         ResponseEntity<?> responseEntity = workoutService.updateWorkout(id, updateWorkoutDTO);
         return responseEntity;
     }

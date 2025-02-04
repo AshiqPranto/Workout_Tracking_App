@@ -17,7 +17,6 @@ public class UserUpdateDto {
 
     private boolean isActive;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

@@ -44,6 +44,9 @@ public class User implements UserDetails {
     @JsonManagedReference
     private List<Workout> workouts;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

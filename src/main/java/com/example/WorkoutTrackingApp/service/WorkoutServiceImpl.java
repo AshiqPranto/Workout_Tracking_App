@@ -32,15 +32,15 @@ public class WorkoutServiceImpl implements WorkoutService {
             Workout workout = convertToEntity(workoutDTO);
             workout = workoutRepository.save(workout);
             return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     private Workout convertToEntity(WorkoutDTO workoutDTO) {
         String userName = AuthUtil.getAuthenticatedUserName();
-        if(userName == null) {
+
+        if (userName == null) {
             throw new RuntimeException("User is not authenticated");
         }
         User user = userRepository.findByEmail(userName).get();
@@ -80,7 +80,9 @@ public class WorkoutServiceImpl implements WorkoutService {
             Workout existingWorkout = getWorkoutById(id);
             existingWorkout.setName(updateWorkoutDTO.getName());
             existingWorkout.setEndTime(updateWorkoutDTO.getEndTime());
+
             Workout workout = workoutRepository.save(existingWorkout);
+
             return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

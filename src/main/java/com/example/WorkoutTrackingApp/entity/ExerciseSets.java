@@ -41,6 +41,9 @@ public class ExerciseSets {
     @JoinColumn(name = "workout_id", nullable = false)
     private Workout workout;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

@@ -46,7 +46,7 @@ public class ExerciseController {
     @PutMapping("/{id}")
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Exercise> updateExercise(
-            @PathVariable Integer id, 
+            @PathVariable Integer id,
             @RequestBody ExerciseDTO exerciseDTO) {
         return ResponseEntity.ok(exerciseService.updateExercise(id, exerciseDTO));
     }

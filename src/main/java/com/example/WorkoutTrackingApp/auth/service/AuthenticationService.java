@@ -6,6 +6,8 @@ import com.example.WorkoutTrackingApp.auth.dto.RegisterRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface AuthenticationService {
+
     ResponseEntity<AuthenticationResponse> register(RegisterRequest request);
+
     ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request);
 }
