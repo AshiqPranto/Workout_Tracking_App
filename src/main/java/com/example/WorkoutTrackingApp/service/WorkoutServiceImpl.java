@@ -61,7 +61,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<Workout> getAllWorkouts() {
-        return workoutRepository.findAll();
+//        return workoutRepository.findAll();
+        return workoutRepository.findAllByIsDeletedFalse();
     }
 
     @Override
