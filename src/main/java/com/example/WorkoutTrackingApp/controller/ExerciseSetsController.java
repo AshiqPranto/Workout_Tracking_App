@@ -19,7 +19,6 @@ public class ExerciseSetsController {
 
     @PostMapping
     public ResponseEntity<?> createExerciseSet(@RequestBody ExerciseSetDTO exerciseSetDTO) {
-//        return new ResponseEntity<>(exerciseSetsService.createExerciseSet(exerciseSets), HttpStatus.CREATED);
         ResponseEntity<?> responseEntity = exerciseSetsService.createExerciseSet(exerciseSetDTO);
         return responseEntity;
     }
@@ -53,21 +52,21 @@ public class ExerciseSetsController {
     public ResponseEntity<List<ExerciseSets>> getExerciseSetsByExerciseAndUser(
             @PathVariable Integer exerciseId,
             @PathVariable Integer userId) {
+
         List<ExerciseSets> exerciseSets = exerciseSetsService.getAllByExerciseIdAndUserId(exerciseId, userId);
-//        return ResponseEntity.ok(exerciseSets);
         return new ResponseEntity<>(exerciseSets, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateExerciseSet(
-            @PathVariable Integer id,
-            @RequestBody ExerciseSetDTO exerciseSetDTO) {
+    public ResponseEntity<?> updateExerciseSet(@PathVariable Integer id, @RequestBody ExerciseSetDTO exerciseSetDTO) {
+
         ResponseEntity<?> responseEntity = exerciseSetsService.updateExerciseSet(id, exerciseSetDTO);
         return responseEntity;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExerciseSet(@PathVariable Integer id) {
+
         exerciseSetsService.deleteExerciseSet(id);
         return ResponseEntity.noContent().build();
     }

@@ -23,12 +23,10 @@ public class UserServiceImp implements UserService {
     }
 
     public User registerUser(User user) {
-        // Hash password before saving
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public List<User> getAll(){
+    public List<User> getAll() {
         return userRepository.findAllByOrderByEmailAsc().orElse(Collections.emptyList());
     }
 
@@ -38,10 +36,9 @@ public class UserServiceImp implements UserService {
 
     @Override
     public ResponseEntity<?> deleteUserById(Long id) {
-        try{
+        try {
             userRepository.deleteById(id);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(Map.of("message: ", "Detele Successfully"), HttpStatus.OK);
@@ -59,17 +56,14 @@ public class UserServiceImp implements UserService {
         User user = userRepository.findById(id)
                 .orElse(new User());
 
-        // Update fields
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-//        user.setIsActive(userDto.isActive());
         user.setActive(userDto.isActive());
-        // Save updated user
         User updatedUser = userRepository.save(user);
 
-        // Convert to DTO and return
         return mapToDto(updatedUser);
     }
+
     private UserUpdateDto mapToDto(User user) {
         UserUpdateDto dto = new UserUpdateDto();
         dto.setId(user.getId());

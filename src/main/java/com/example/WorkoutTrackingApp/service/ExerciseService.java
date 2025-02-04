@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ExerciseService {
+
     ResponseEntity<?> createExercise(ExerciseDTO exerciseDTO);
 
     ResponseEntity<?> getExerciseById(Integer id);

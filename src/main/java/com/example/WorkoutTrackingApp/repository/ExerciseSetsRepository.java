@@ -10,13 +10,17 @@ import java.util.List;
 
 @Repository
 public interface ExerciseSetsRepository extends JpaRepository<ExerciseSets, Integer> {
+
     List<ExerciseSets> findByExerciseId(Integer exerciseId);
+
     List<ExerciseSets> findByWorkoutId(Integer workoutId);
+
     @Query("SELECT es FROM ExerciseSets es WHERE es.workout.user.id = :userId")
     List<ExerciseSets> findAllByUserId(@Param("userId") Integer userId);
+
     @Query("SELECT es FROM ExerciseSets es " +
             "WHERE es.exercise.id = :exerciseId AND es.workout.user.id = :userId")
     List<ExerciseSets> findAllByExerciseIdAndUserId(@Param("exerciseId") Integer exerciseId,
-                                                 @Param("userId") Integer userId);
+                                                    @Param("userId") Integer userId);
 
 }

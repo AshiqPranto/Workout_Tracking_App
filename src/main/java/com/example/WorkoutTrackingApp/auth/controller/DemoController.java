@@ -17,14 +17,14 @@ public class DemoController {
     public ResponseEntity<?> register( ) {
         return  new ResponseEntity<>("User only can access this service", HttpStatus.OK);
     }
+
     @GetMapping("/admin")
     public ResponseEntity<?> adminEndpoint() {
         return new ResponseEntity<>("admin can access this page", HttpStatus.OK);
     }
+
     @GetMapping("/userandadmin")
     public ResponseEntity<?> userAndAdminEndpoint() {
         return new ResponseEntity<>("user and admin both can access this page", HttpStatus.OK);
     }
-
-
 }

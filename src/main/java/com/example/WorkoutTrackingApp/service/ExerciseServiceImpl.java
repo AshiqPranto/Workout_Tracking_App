@@ -23,22 +23,18 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ResponseEntity<?> createExercise(ExerciseDTO exerciseDTO)
-    {
-        try{
+    public ResponseEntity<?> createExercise(ExerciseDTO exerciseDTO) {
+        try {
             Exercise exercise = convertToEntity(exerciseDTO);
             Exercise savedExercise = exerciseRepository.save(exercise);
             return new ResponseEntity<>(savedExercise, HttpStatus.CREATED);
-        }
-        catch(Exception e){
-//            e.printStackTrace();
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
-    private Exercise convertToEntity(ExerciseDTO exerciseDTO)
-    {
+    private Exercise convertToEntity(ExerciseDTO exerciseDTO) {
         return Exercise.builder()
                 .name(exerciseDTO.getName())
                 .category(exerciseDTO.getCategory())
@@ -51,11 +47,10 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public ResponseEntity<?> getExerciseById(Integer id) {
-        try{
+        try {
             Optional<Exercise> exercise = exerciseRepository.findByIdAndIsDeletedFalse(id);
             return new ResponseEntity<>(exercise.get(), HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

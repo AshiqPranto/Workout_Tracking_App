@@ -28,7 +28,4 @@ public class AuthenticationController {
         return service.authenticate(request);
     }
 
-
-
-
 }

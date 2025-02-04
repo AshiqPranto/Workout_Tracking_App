@@ -26,15 +26,12 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
     @Override
     public ResponseEntity<?> createExerciseSet(ExerciseSetDTO exerciseSetDTO) {
-//        return exerciseSetsRepository.save(exerciseSets);
-        try{
+        try {
             ExerciseSets exerciseSets = convertToEntity(exerciseSetDTO);
             ExerciseSets savedExerciseSets = exerciseSetsRepository.save(exerciseSets);
             return new ResponseEntity<>(savedExerciseSets, HttpStatus.CREATED);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-//            System.out.println(e.getMessage());
         }
 
 
@@ -85,7 +82,7 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
     @Override
     public ResponseEntity<?> updateExerciseSet(Integer id, ExerciseSetDTO exerciseSetDTO) {
-        try{
+        try {
             ExerciseSets existingExerciseSet = getExerciseSetById(id);
             existingExerciseSet.setReps(exerciseSetDTO.getReps());
             existingExerciseSet.setWeights(exerciseSetDTO.getWeights());
@@ -93,15 +90,14 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
             existingExerciseSet.setWorkout(workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get());
             ExerciseSets exerciseSets = exerciseSetsRepository.save(existingExerciseSet);
             return new ResponseEntity<>(exerciseSets, HttpStatus.OK);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
     public void deleteExerciseSet(Integer id) {
+
         if (!exerciseSetsRepository.existsById(id)) {
             throw new EntityNotFoundException("ExerciseSet not found with id: " + id);
         }

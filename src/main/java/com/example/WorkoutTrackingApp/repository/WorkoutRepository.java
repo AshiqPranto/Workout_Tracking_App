@@ -10,7 +10,9 @@ import java.util.List;
 
 @Repository
 public interface WorkoutRepository extends JpaRepository<Workout, Integer> {
+
     List<Workout> findByUserId(Integer userId);
+
     @Query("SELECT DISTINCT w FROM Workout w JOIN w.exerciseSets es WHERE es.exercise.id = :exerciseId")
     List<Workout> findAllWorkoutsByExerciseId(@Param("exerciseId") Integer exerciseId);
 

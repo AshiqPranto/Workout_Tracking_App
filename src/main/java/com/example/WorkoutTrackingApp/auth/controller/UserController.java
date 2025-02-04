@@ -32,18 +32,15 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-//    @GetMapping("/{email}")
-//    public ResponseEntity<?> findUserByEmail(@PathVariable String email) {
-//        User result = userService.findUserByEmail(email);
-//        return ResponseEntity.ok().body(result);
-//    }
-
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
+
         if (userService.checkIfEmailExists(user.getEmail())) {
             return ResponseEntity.badRequest().body("Email is already in use");
         }
+
         User registeredUser = userService.registerUser(user);
+
         return ResponseEntity.ok(registeredUser);
     }
 
