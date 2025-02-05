@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<List<User>> findAllByOrderByEmailAsc();
 
+    Optional<List<User>> findAllByIsDeletedFalseOrderByEmailAsc();
+
 }

@@ -27,7 +27,8 @@ public class UserServiceImp implements UserService {
     }
 
     public List<User> getAll() {
-        return userRepository.findAllByOrderByEmailAsc().orElse(Collections.emptyList());
+//        return userRepository.findAllByOrderByEmailAsc().orElse(Collections.emptyList());
+        return userRepository.findAllByIsDeletedFalseOrderByEmailAsc().orElse(Collections.emptyList());
     }
 
     public User findUserById(Long id) {
