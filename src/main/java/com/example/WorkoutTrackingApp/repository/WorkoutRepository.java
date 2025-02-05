@@ -14,6 +14,8 @@ public interface WorkoutRepository extends JpaRepository<Workout, Integer> {
 
     List<Workout> findByUserId(Integer userId);
 
+    List<Workout> findByUserIdAndIsDeletedFalse(Integer userId);
+
     List<Workout> findAllByIsDeletedFalse();
 
     Optional<Workout> findByIdAndIsDeletedFalse(Integer id);
