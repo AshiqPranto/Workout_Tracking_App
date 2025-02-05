@@ -84,7 +84,7 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
     @Override
     public List<ExerciseSets> getExerciseSetsByWorkoutId(Integer workoutId) {
-        return exerciseSetsRepository.findByWorkoutId(workoutId);
+        return exerciseSetsRepository.findByWorkoutIdAndIsDeletedFalse(workoutId);
     }
 
     @Override
