@@ -72,8 +72,10 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exerciseRepository.save(existingExercise);
     }
 
+    //Todo: Handle transactional
     @Override
     public void deleteExercise(Integer id) {
+        //TODO: Use doa
         Exercise exercise = exerciseRepository.findById(id).get(); // Will throw an exception if not found
         exercise.setDeleted(true);
         exerciseRepository.save(exercise);

@@ -55,18 +55,19 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public Workout getWorkoutById(Integer id) {
-        return workoutRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Workout not found with id: " + id));
+//        return workoutRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("Workout not found with id: " + id));
+        return workoutRepository.findByIdAndIsDeletedFalse(id).get();
     }
 
     @Override
     public List<Workout> getAllWorkouts() {
-        return workoutRepository.findAll();
+        return workoutRepository.findAllByIsDeletedFalse();
     }
 
     @Override
     public List<Workout> getWorkoutsByUserId(Integer userId) {
-        return workoutRepository.findByUserId(userId);
+        return workoutRepository.findByUserIdAndIsDeletedFalse(userId);
     }
 
     @Override
@@ -94,6 +95,9 @@ public class WorkoutServiceImpl implements WorkoutService {
         if (!workoutRepository.existsById(id)) {
             throw new EntityNotFoundException("Workout not found with id: " + id);
         }
-        workoutRepository.deleteById(id);
+
+        Workout workout = workoutRepository.findByIdAndIsDeletedFalse(id).get();
+        workout.setDeleted(true);
+        workoutRepository.save(workout);
     }
 }
