@@ -117,6 +117,8 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
         if (!exerciseSetsRepository.existsById(id)) {
             throw new EntityNotFoundException("ExerciseSet not found with id: " + id);
         }
-        exerciseSetsRepository.deleteById(id);
+        ExerciseSets exerciseSets = getExerciseSetById(id);
+        exerciseSets.setDeleted(true);
+        exerciseSetsRepository.save(exerciseSets);
     }
 }
