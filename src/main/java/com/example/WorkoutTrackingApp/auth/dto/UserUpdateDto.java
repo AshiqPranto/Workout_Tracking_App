@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class UserUpdateDto {
 
-    private Long id;
+    private Integer id;
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -17,11 +17,11 @@ public class UserUpdateDto {
 
     private boolean isActive;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

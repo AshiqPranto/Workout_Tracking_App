@@ -1,6 +1,7 @@
 package com.example.WorkoutTrackingApp.auth.entity;
 
 import com.example.WorkoutTrackingApp.auth.Enum.Role;
+import com.example.WorkoutTrackingApp.entity.BaseEntity;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -22,11 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-public class User implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity implements UserDetails {
 
     private String name;
 
@@ -43,12 +40,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Workout> workouts;
-
-    @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
-
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -85,15 +76,5 @@ public class User implements UserDetails {
     }
 
     private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 
 }
