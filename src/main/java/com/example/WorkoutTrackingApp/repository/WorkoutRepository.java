@@ -18,7 +18,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Integer> {
 
     Optional<Workout> findByIdAndIsDeletedFalse(Integer id);
 
-    @Query("SELECT DISTINCT w FROM Workout w JOIN w.exerciseSets es WHERE es.exercise.id = :exerciseId")
+    @Query("SELECT DISTINCT w FROM Workout w JOIN w.exerciseSets es WHERE es.exercise.id = :exerciseId AND es.workout.isDeleted = false")
     List<Workout> findAllWorkoutsByExerciseId(@Param("exerciseId") Integer exerciseId);
 
 }
