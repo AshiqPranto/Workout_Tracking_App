@@ -70,7 +70,7 @@ public class UserServiceImp implements UserService {
 
     private UserUpdateDto mapToDto(User user) {
         UserUpdateDto dto = new UserUpdateDto();
-        dto.setId(user.getId());
+        dto.setId((int)user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setActive(user.getIsActive());
