@@ -96,6 +96,9 @@ public class WorkoutServiceImpl implements WorkoutService {
         if (!workoutRepository.existsById(id)) {
             throw new EntityNotFoundException("Workout not found with id: " + id);
         }
-        workoutRepository.deleteById(id);
+
+        Workout workout = workoutRepository.findByIdAndIsDeletedFalse(id).get();
+        workout.setDeleted(true);
+        workoutRepository.save(workout);
     }
 }
