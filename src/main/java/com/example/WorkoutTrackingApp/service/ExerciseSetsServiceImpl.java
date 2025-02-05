@@ -57,7 +57,7 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
     @Override
     public List<ExerciseSets> getAllExerciseSets() {
-        return exerciseSetsRepository.findAll();
+        return exerciseSetsRepository.findAllByIsDeletedFalse();
     }
 
     @Override
