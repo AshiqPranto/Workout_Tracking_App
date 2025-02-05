@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,17 +28,20 @@ public class UserServiceImp implements UserService {
     }
 
     public List<User> getAll() {
-        return userRepository.findAllByOrderByEmailAsc().orElse(Collections.emptyList());
+        return userRepository.findAllByIsDeletedFalseOrderByEmailAsc().orElse(Collections.emptyList());
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id).orElse(new User());
+        return userRepository.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
     public ResponseEntity<?> deleteUserById(Long id) {
         try {
-            userRepository.deleteById(id);
+//            userRepository.deleteById(id);
+            User user = findUserById(id);
+            user.setDeleted(true);
+            userRepository.save(user);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

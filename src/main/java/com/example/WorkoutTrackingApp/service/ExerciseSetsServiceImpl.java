@@ -51,23 +51,40 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
     @Override
     public ExerciseSets getExerciseSetById(Integer id) {
-        return exerciseSetsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ExerciseSet not found with id: " + id));
+//        return exerciseSetsRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("ExerciseSet not found with id: " + id));
+//        return exerciseSetsRepository.findByIdAndIsDeletedFalse(id);
+
+
+
+        ExerciseSets exerciseSets = null;
+        try{
+//            exerciseSets = exerciseSetsRepository.findByExerciseSetsIdAndIsDeletedFalse(id);
+            exerciseSets = exerciseSetsRepository.findByIdAndIsDeletedFalse(id);
+        }
+        catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Exercise Sets not found..! May be deleted already..!");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return exerciseSets;
     }
 
     @Override
     public List<ExerciseSets> getAllExerciseSets() {
-        return exerciseSetsRepository.findAll();
+        return exerciseSetsRepository.findAllByIsDeletedFalse();
     }
 
     @Override
     public List<ExerciseSets> getExerciseSetsByExerciseId(Integer exerciseId) {
-        return exerciseSetsRepository.findByExerciseId(exerciseId);
+//        return exerciseSetsRepository.findByExerciseId(exerciseId);
+        return exerciseSetsRepository.findByExerciseIdAndIsDeletedFalse(exerciseId);
     }
 
     @Override
     public List<ExerciseSets> getExerciseSetsByWorkoutId(Integer workoutId) {
-        return exerciseSetsRepository.findByWorkoutId(workoutId);
+        return exerciseSetsRepository.findByWorkoutIdAndIsDeletedFalse(workoutId);
     }
 
     @Override
@@ -101,6 +118,8 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
         if (!exerciseSetsRepository.existsById(id)) {
             throw new EntityNotFoundException("ExerciseSet not found with id: " + id);
         }
-        exerciseSetsRepository.deleteById(id);
+        ExerciseSets exerciseSets = getExerciseSetById(id);
+        exerciseSets.setDeleted(true);
+        exerciseSetsRepository.save(exerciseSets);
     }
 }

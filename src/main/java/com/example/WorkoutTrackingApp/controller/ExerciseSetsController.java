@@ -24,8 +24,9 @@ public class ExerciseSetsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExerciseSets> getExerciseSetById(@PathVariable Integer id) {
-        return ResponseEntity.ok(exerciseSetsService.getExerciseSetById(id));
+    public ResponseEntity<?> getExerciseSetById(@PathVariable Integer id) {
+        ExerciseSets exerciseSets = exerciseSetsService.getExerciseSetById(id);
+        return ResponseEntity.ok(exerciseSets);
     }
 
     @GetMapping

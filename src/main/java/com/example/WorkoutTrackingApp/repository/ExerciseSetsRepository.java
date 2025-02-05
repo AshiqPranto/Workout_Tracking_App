@@ -13,13 +13,19 @@ public interface ExerciseSetsRepository extends JpaRepository<ExerciseSets, Inte
 
     List<ExerciseSets> findByExerciseId(Integer exerciseId);
 
-    List<ExerciseSets> findByWorkoutId(Integer workoutId);
+    List<ExerciseSets> findByExerciseIdAndIsDeletedFalse(Integer exerciseId);
 
-    @Query("SELECT es FROM ExerciseSets es WHERE es.workout.user.id = :userId")
+    List<ExerciseSets> findByWorkoutIdAndIsDeletedFalse(Integer workoutId);
+
+    List<ExerciseSets> findAllByIsDeletedFalse();
+
+    ExerciseSets findByIdAndIsDeletedFalse(Integer exerciseSetsId);
+
+    @Query("SELECT es FROM ExerciseSets es WHERE es.workout.user.id = :userId AND es.isDeleted = false")
     List<ExerciseSets> findAllByUserId(@Param("userId") Integer userId);
 
     @Query("SELECT es FROM ExerciseSets es " +
-            "WHERE es.exercise.id = :exerciseId AND es.workout.user.id = :userId")
+            "WHERE es.exercise.id = :exerciseId AND es.workout.user.id = :userId AND es.isDeleted = false")
     List<ExerciseSets> findAllByExerciseIdAndUserId(@Param("exerciseId") Integer exerciseId,
                                                     @Param("userId") Integer userId);
 
