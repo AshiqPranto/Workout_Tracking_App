@@ -38,7 +38,10 @@ public class UserServiceImp implements UserService {
     @Override
     public ResponseEntity<?> deleteUserById(Long id) {
         try {
-            userRepository.deleteById(id);
+//            userRepository.deleteById(id);
+            User user = findUserById(id);
+            user.setDeleted(true);
+            userRepository.save(user);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
