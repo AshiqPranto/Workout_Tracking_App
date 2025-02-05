@@ -51,8 +51,24 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
     @Override
     public ExerciseSets getExerciseSetById(Integer id) {
-        return exerciseSetsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ExerciseSet not found with id: " + id));
+//        return exerciseSetsRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("ExerciseSet not found with id: " + id));
+//        return exerciseSetsRepository.findByIdAndIsDeletedFalse(id);
+
+
+
+        ExerciseSets exerciseSets = null;
+        try{
+//            exerciseSets = exerciseSetsRepository.findByExerciseSetsIdAndIsDeletedFalse(id);
+            exerciseSets = exerciseSetsRepository.findByIdAndIsDeletedFalse(id);
+        }
+        catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Exercise Sets not found..! May be deleted already..!");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return exerciseSets;
     }
 
     @Override
