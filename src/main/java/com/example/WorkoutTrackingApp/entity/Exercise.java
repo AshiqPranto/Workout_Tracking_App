@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,16 +35,16 @@ public class Exercise extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String category;
 
-    @Size(max = 5000, message = "Instructions must not exceed 5000 characters")
+    @Size(max = 5000, message = ValidationMessages.INSTRUCTIONS_MAX_LENGTH)
     @Column(length = 500)
     private String instructions;
 
-    @Size(max = 500, message = "Animation URL must not exceed 500 characters")
+    @Size(max = 500, message = ValidationMessages.ANIMATION_URL_MAX_LENGTH)
     @Column(name = "animation_url", length = 500)
     private String animationUrl;
 
-    @NotBlank(message = "Body part is required")
-    @Size(max = 50, message = "Body part must not exceed 50 characters")
+    @NotBlank(message = ValidationMessages.BODY_PART_REQUIRED)
+    @Size(max = 50, message = ValidationMessages.BODY_PART_MAX_LENGTH)
     @Column(name = "body_part", nullable = false, length = 50)
     private String bodyPart;
 

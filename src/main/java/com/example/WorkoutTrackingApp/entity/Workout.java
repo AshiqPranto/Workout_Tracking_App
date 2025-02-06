@@ -1,6 +1,7 @@
 package com.example.WorkoutTrackingApp.entity;
 
 import com.example.WorkoutTrackingApp.auth.entity.User;
+import com.example.WorkoutTrackingApp.constants.ValidationMessages;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -21,7 +22,7 @@ import java.util.List;
 @Table(name = "workouts")
 public class Workout extends BaseEntity {
 
-    @NotBlank(message = "Workout name is required")
+    @NotBlank(message = ValidationMessages.WORKOUT_NAME_REQUIRED)
     @Column(nullable = false, length = 100)
     private String name;
 

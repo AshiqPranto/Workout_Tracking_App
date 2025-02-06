@@ -1,5 +1,6 @@
 package com.example.WorkoutTrackingApp.entity;
 
+import com.example.WorkoutTrackingApp.constants.ValidationMessages;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -19,11 +20,11 @@ import java.time.LocalDateTime;
 @Table(name = "exercise_sets")
 public class ExerciseSets extends BaseEntity {
 
-    @Min(value = 1, message = "Reps must be at least 1")
+    @Min(value = 1, message = ValidationMessages.REPS_MIN_Number)
     @Column(nullable = false)
     private Integer reps;
 
-    @Min(value = 0, message = "Weight must be at least 0")
+    @Min(value = 0, message = ValidationMessages.WEIGHTS_MIN)
     @Column(nullable = false)
     private Integer weights;
 
