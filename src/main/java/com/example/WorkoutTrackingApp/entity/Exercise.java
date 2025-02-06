@@ -1,5 +1,6 @@
 package com.example.WorkoutTrackingApp.entity;
 
+import com.example.WorkoutTrackingApp.constants.ValidationMessages;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
@@ -23,13 +24,13 @@ import java.util.List;
 @Table(name = "exercises")
 public class Exercise extends BaseEntity {
 
-    @NotBlank(message = "Name is required")
-    @Size(max = 100, message = "Name must not exceed 100 characters")
+    @NotBlank(message = ValidationMessages.NAME_REQUIRED)
+    @Size(max = 100, message = ValidationMessages.NAME_MAX_LENGTH)
     @Column(nullable = false, length = 100)
     private String name;
 
-    @NotBlank(message = "Category is required")
-    @Size(max = 50, message = "Category must not exceed 50 characters")
+    @NotBlank(message = ValidationMessages.CATEGORY_REQUIRED)
+    @Size(max = 50, message = ValidationMessages.CATEGORY_MAX_LENGTH)
     @Column(nullable = false, length = 50)
     private String category;
 
