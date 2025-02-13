@@ -1,5 +1,6 @@
 package com.example.WorkoutTrackingApp.service;
 
+import com.example.WorkoutTrackingApp.Mapper.ExerciseMapper;
 import com.example.WorkoutTrackingApp.dto.ExerciseDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
+    private final ExerciseMapper exerciseMapper = ExerciseMapper.INSTANCE;
 
     @Autowired
     public ExerciseServiceImpl(ExerciseRepository exerciseRepository) {
@@ -28,7 +30,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     public ResponseEntity<?> createExercise(ExerciseDTO exerciseDTO) {
         log.info("Creating exercise with name {}", exerciseDTO.getName());
         try {
-            Exercise exercise = convertToEntity(exerciseDTO);
+            Exercise exercise = exerciseMapper.dtoToExercise(exerciseDTO);
             Exercise savedExercise = exerciseRepository.save(exercise);
             log.info("Exercise created successfully with ID: {}", savedExercise.getId());
             return new ResponseEntity<>(savedExercise, HttpStatus.CREATED);
@@ -36,18 +38,6 @@ public class ExerciseServiceImpl implements ExerciseService {
             log.error("Error occurred while creating exercise: {}", e.getMessage());
             return new ResponseEntity<>("Error occurred while creating exercise.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-
-    private Exercise convertToEntity(ExerciseDTO exerciseDTO) {
-        return Exercise.builder()
-                .name(exerciseDTO.getName())
-                .category(exerciseDTO.getCategory())
-                .instructions(exerciseDTO.getInstructions())
-                .animationUrl(exerciseDTO.getAnimationUrl())
-                .bodyPart(exerciseDTO.getBodyPart())
-                .exerciseSets(List.of())
-                .build();
     }
 
     @Override
