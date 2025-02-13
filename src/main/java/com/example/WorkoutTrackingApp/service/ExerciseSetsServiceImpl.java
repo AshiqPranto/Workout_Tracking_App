@@ -33,7 +33,6 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
         logger.info("Creating ExerciseSet with Exercise ID: {} and Workout ID: {}",
                 exerciseSetDTO.getExerciseId(), exerciseSetDTO.getWorkoutId());
         try {
-//            ExerciseSets exerciseSets = convertToEntity(exerciseSetDTO);
             ExerciseSetsMapper exerciseSetsMapper = ExerciseSetsMapper.INSTANCE;
             logger.debug("Converting ExerciseSetDTO to ExerciseSets entity");
             ExerciseSets exerciseSets = exerciseSetsMapper.ExerciseSetDTOToExerciseSets(exerciseSetDTO);
