@@ -27,7 +27,6 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
     private final ExerciseSetsRepository exerciseSetsRepository;
     private final ExerciseRepository exerciseRepository;
     private final WorkoutRepository workoutRepository;
-    private final ExerciseSetsMapper exerciseSetsMapper = ExerciseSetsMapper.INSTANCE
 
     @Override
     public ResponseEntity<?> createExerciseSet(ExerciseSetDTO exerciseSetDTO) {
@@ -35,6 +34,7 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
                 exerciseSetDTO.getExerciseId(), exerciseSetDTO.getWorkoutId());
         try {
 //            ExerciseSets exerciseSets = convertToEntity(exerciseSetDTO);
+            ExerciseSetsMapper exerciseSetsMapper = ExerciseSetsMapper.INSTANCE;
             logger.debug("Converting ExerciseSetDTO to ExerciseSets entity");
             ExerciseSets exerciseSets = exerciseSetsMapper.ExerciseSetDTOToExerciseSets(exerciseSetDTO);
             logger.debug("Conversion complete: {}", exerciseSets);
