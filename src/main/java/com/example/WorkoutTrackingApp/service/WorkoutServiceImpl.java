@@ -1,5 +1,6 @@
 package com.example.WorkoutTrackingApp.service;
 
+import com.example.WorkoutTrackingApp.Mapper.WorkoutMapper;
 import com.example.WorkoutTrackingApp.auth.entity.User;
 import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
 import com.example.WorkoutTrackingApp.auth.service.JwtService;
@@ -9,6 +10,8 @@ import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.jdbc.Work;
@@ -28,11 +31,15 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
+    private final WorkoutMapper workoutMapper = WorkoutMapper.INSTANCE;
+
     @Override
     public ResponseEntity<?> createWorkout(WorkoutDTO workoutDTO) {
         log.info("Creating a new workout: {}", workoutDTO.getName());
         try {
-            Workout workout = convertToEntity(workoutDTO);
+//            Workout workout = convertToEntity(workoutDTO);
+            WorkoutMapper workoutMapper = WorkoutMapper.INSTANCE;
+            Workout workout = workoutMapper.dtoToWorkout(workoutDTO);
             workout = workoutRepository.save(workout);
             log.info("Workout created successfully with ID: {}", workout.getId());
             return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
