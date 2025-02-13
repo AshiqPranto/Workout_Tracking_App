@@ -1,6 +1,6 @@
 package com.example.WorkoutTrackingApp.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
+import com.example.WorkoutTrackingApp.Mapper.ExerciseSetsMapper;
 import com.example.WorkoutTrackingApp.dto.ExerciseSetDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
@@ -27,13 +27,18 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
     private final ExerciseSetsRepository exerciseSetsRepository;
     private final ExerciseRepository exerciseRepository;
     private final WorkoutRepository workoutRepository;
+    private final ExerciseSetsMapper exerciseSetsMapper = ExerciseSetsMapper.INSTANCE
 
     @Override
     public ResponseEntity<?> createExerciseSet(ExerciseSetDTO exerciseSetDTO) {
         logger.info("Creating ExerciseSet with Exercise ID: {} and Workout ID: {}",
                 exerciseSetDTO.getExerciseId(), exerciseSetDTO.getWorkoutId());
         try {
-            ExerciseSets exerciseSets = convertToEntity(exerciseSetDTO);
+//            ExerciseSets exerciseSets = convertToEntity(exerciseSetDTO);
+            logger.debug("Converting ExerciseSetDTO to ExerciseSets entity");
+            ExerciseSets exerciseSets = exerciseSetsMapper.ExerciseSetDTOToExerciseSets(exerciseSetDTO);
+            logger.debug("Conversion complete: {}", exerciseSets);
+
             ExerciseSets savedExerciseSets = exerciseSetsRepository.save(exerciseSets);
 
             logger.debug("ExerciseSet created successfully with ID: {}", savedExerciseSets.getId());
@@ -43,21 +48,6 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
             logger.error("Error while creating ExerciseSet: {}", e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }
-    }
-
-    private ExerciseSets convertToEntity(ExerciseSetDTO exerciseSetDTO) {
-        logger.debug("Converting ExerciseSetDTO to ExerciseSets entity");
-
-        Exercise exercise = exerciseRepository.findById(exerciseSetDTO.getExerciseId()).get();
-        Workout workout = workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get();
-        ExerciseSets exerciseSets = ExerciseSets.builder()
-                .reps(exerciseSetDTO.getReps())
-                .weights(exerciseSetDTO.getWeights())
-                .exercise(exercise)
-                .workout(workout)
-                .build();
-        logger.debug("Conversion complete: {}", exerciseSets);
-        return exerciseSets;
     }
 
     @Override
@@ -128,17 +118,24 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
         logger.info("Updating ExerciseSet with ID: {}", id);
         try {
             ExerciseSets existingExerciseSet = getExerciseSetById(id);
-            existingExerciseSet.setReps(exerciseSetDTO.getReps());
-            existingExerciseSet.setWeights(exerciseSetDTO.getWeights());
-            existingExerciseSet.setExercise(exerciseRepository.findById(exerciseSetDTO.getExerciseId()).get());
-            existingExerciseSet.setWorkout(workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get());
+            existingExerciseSet = setPropertyToExistingExercise(existingExerciseSet, exerciseSetDTO);
+
             ExerciseSets updatedExerciseSet = exerciseSetsRepository.save(existingExerciseSet);
             logger.info("ExerciseSet updated successfully with ID: {}", updatedExerciseSet.getId());
+
             return new ResponseEntity<>(updatedExerciseSet, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error updating ExerciseSet with ID {}: {}", id, e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    private ExerciseSets setPropertyToExistingExercise(ExerciseSets existingExerciseSet, ExerciseSetDTO exerciseSetDTO) {
+        existingExerciseSet.setReps(exerciseSetDTO.getReps());
+        existingExerciseSet.setWeights(exerciseSetDTO.getWeights());
+        existingExerciseSet.setExercise(exerciseRepository.findById(exerciseSetDTO.getExerciseId()).get());
+        existingExerciseSet.setWorkout(workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get());
+        return existingExerciseSet;
     }
 
     @Override

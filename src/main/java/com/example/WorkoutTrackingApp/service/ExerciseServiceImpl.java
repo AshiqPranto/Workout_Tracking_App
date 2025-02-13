@@ -5,6 +5,7 @@ import com.example.WorkoutTrackingApp.dto.ExerciseDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
 import com.example.WorkoutTrackingApp.repository.ExerciseRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exerciseRepository.findAllByIsDeletedFalse();
     }
 
+    @Transactional
     @Override
     public Exercise updateExercise(Integer id, ExerciseDTO exerciseDTO) {
         log.info("Updating exercise with ID: {}", id);
@@ -74,19 +76,25 @@ public class ExerciseServiceImpl implements ExerciseService {
             throw new RuntimeException("Exercise not found");
         }
         log.info("Fetched exercise with ID {} successfully", id);
+
         Exercise existingExercise = existingExerciseOpt.get();
-        existingExercise.setName(exerciseDTO.getName());
-        existingExercise.setCategory(exerciseDTO.getCategory());
-        existingExercise.setInstructions(exerciseDTO.getInstructions());
-        existingExercise.setAnimationUrl(exerciseDTO.getAnimationUrl());
-        existingExercise.setBodyPart(exerciseDTO.getBodyPart());
+        existingExercise = setPropertyToExistingExercise(existingExercise, exerciseDTO);
 
         Exercise updatedExercise = exerciseRepository.save(existingExercise);
         log.info("Exercise updated successfully with ID: {}", id);
         return updatedExercise;
     }
 
-    //Todo: Handle transactional
+    private Exercise setPropertyToExistingExercise(Exercise existingExercise, ExerciseDTO exerciseDTO) {
+        existingExercise.setName(exerciseDTO.getName());
+        existingExercise.setCategory(exerciseDTO.getCategory());
+        existingExercise.setInstructions(exerciseDTO.getInstructions());
+        existingExercise.setAnimationUrl(exerciseDTO.getAnimationUrl());
+        existingExercise.setBodyPart(exerciseDTO.getBodyPart());
+        return existingExercise;
+    }
+
+    @Transactional
     @Override
     public void deleteExercise(Integer id) {
         //TODO: Use doa
