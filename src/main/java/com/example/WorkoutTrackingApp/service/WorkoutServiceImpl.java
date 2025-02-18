@@ -33,6 +33,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         try {
             WorkoutMapper workoutMapper = WorkoutMapper.INSTANCE;
             Workout workout = workoutMapper.workoutDTOToWorkout(workoutDTO);
+
             String userName = AuthUtil.getAuthenticatedUserName();
             log.debug("Extracted authenticated user: {}", userName);
 
@@ -42,8 +43,10 @@ public class WorkoutServiceImpl implements WorkoutService {
             }
             User user = userRepository.findByEmail(userName).get();
             workout.setUser(user);
+
             workout = workoutRepository.save(workout);
             log.info("Workout created successfully with ID: {}", workout.getId());
+
             return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("Error while creating workout: {}", e.getMessage(), e);
@@ -59,7 +62,6 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<Workout> getAllWorkouts() {
-//        return workoutRepository.findAllByIsDeletedFalse();
         log.info("Fetching all workouts.");
         List<Workout> workouts = workoutRepository.findAllByIsDeletedFalse();
         log.debug("Fetched {} workouts", workouts.size());

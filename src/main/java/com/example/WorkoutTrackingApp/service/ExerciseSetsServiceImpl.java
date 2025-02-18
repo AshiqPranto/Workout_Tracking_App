@@ -66,12 +66,10 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
         }
         catch (EntityNotFoundException e){
             logger.error("EntityNotFoundException while fetching ExerciseSet with ID {}: {}", id, e.getMessage());
-
             throw new EntityNotFoundException("Exercise Sets not found..! May be deleted already..!");
         }
         catch (Exception e){
             logger.error("Unexpected error while fetching ExerciseSet with ID {}: {}", id, e.getMessage(), e);
-
             System.out.println(e.getMessage());
         }
         return exerciseSets;
@@ -83,8 +81,8 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
 
         List<ExerciseSets> exerciseSetsList = exerciseSetsRepository.findAllByIsDeletedFalse();
         logger.debug("Found {} ExerciseSets", exerciseSetsList.size());
-        return exerciseSetsList;
 
+        return exerciseSetsList;
     }
 
     @Override
@@ -149,11 +147,11 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
         logger.info("Soft deleting ExerciseSet with ID: {}", id);
         if (!exerciseSetsRepository.existsById(id)) {
             logger.warn("ExerciseSet with ID {} not found for deletion", id);
-
             throw new EntityNotFoundException("ExerciseSet not found with id: " + id);
         }
         ExerciseSets exerciseSets = getExerciseSetById(id);
         exerciseSets.setDeleted(true);
+
         exerciseSetsRepository.save(exerciseSets);
         logger.info("ExerciseSet soft deleted successfully with ID: {}", id);
     }
