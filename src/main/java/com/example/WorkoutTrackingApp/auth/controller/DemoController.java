@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class DemoController {
 
-    private final AuthenticationServiceImp service;
-
     @GetMapping("/user")
     public ResponseEntity<?> register( ) {
         return  new ResponseEntity<>("User only can access this service", HttpStatus.OK);

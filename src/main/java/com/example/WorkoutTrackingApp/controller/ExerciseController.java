@@ -27,7 +27,6 @@ public class ExerciseController {
     @PostMapping()
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createExercise(@RequestBody ExerciseDTO exerciseDTO) {
-
         ResponseEntity<?> responseEntity = exerciseService.createExercise(exerciseDTO);
         return responseEntity;
     }
@@ -39,7 +38,7 @@ public class ExerciseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Exercise>> getAllExercises() {
+    public ResponseEntity <List<Exercise>> getAllExercises() {
         return ResponseEntity.ok(exerciseService.getAllExercises());
     }
 

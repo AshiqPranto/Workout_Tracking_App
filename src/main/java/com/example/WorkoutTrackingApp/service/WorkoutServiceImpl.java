@@ -1,5 +1,6 @@
 package com.example.WorkoutTrackingApp.service;
 
+import com.example.WorkoutTrackingApp.Mapper.WorkoutMapper;
 import com.example.WorkoutTrackingApp.auth.entity.User;
 import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
 import com.example.WorkoutTrackingApp.auth.service.JwtService;
@@ -11,12 +12,10 @@ import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.jdbc.Work;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,7 +31,17 @@ public class WorkoutServiceImpl implements WorkoutService {
     public ResponseEntity<?> createWorkout(WorkoutDTO workoutDTO) {
         log.info("Creating a new workout: {}", workoutDTO.getName());
         try {
-            Workout workout = convertToEntity(workoutDTO);
+            WorkoutMapper workoutMapper = WorkoutMapper.INSTANCE;
+            Workout workout = workoutMapper.workoutDTOToWorkout(workoutDTO);
+            String userName = AuthUtil.getAuthenticatedUserName();
+            log.debug("Extracted authenticated user: {}", userName);
+
+            if (userName == null) {
+                log.error("User is not authenticated");
+                throw new RuntimeException("User is not authenticated");
+            }
+            User user = userRepository.findByEmail(userName).get();
+            workout.setUser(user);
             workout = workoutRepository.save(workout);
             log.info("Workout created successfully with ID: {}", workout.getId());
             return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
@@ -40,25 +49,6 @@ public class WorkoutServiceImpl implements WorkoutService {
             log.error("Error while creating workout: {}", e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-    }
-
-    private Workout convertToEntity(WorkoutDTO workoutDTO) {
-        String userName = AuthUtil.getAuthenticatedUserName();
-        log.debug("Extracted authenticated user: {}", userName);
-
-        if (userName == null) {
-            log.error("User is not authenticated");
-            throw new RuntimeException("User is not authenticated");
-        }
-        User user = userRepository.findByEmail(userName).get();
-        Workout workout = Workout.builder()
-                .name(workoutDTO.getName())
-                .startTime(LocalDateTime.now())
-                .user(user)
-                .exerciseSets(List.of())
-                .build();
-        log.debug("Converted WorkoutDTO to Workout entity: {}", workout);
-        return workout;
     }
 
     @Override
