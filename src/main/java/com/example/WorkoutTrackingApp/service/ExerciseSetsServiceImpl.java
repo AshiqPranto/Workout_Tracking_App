@@ -36,6 +36,13 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
             ExerciseSetsMapper exerciseSetsMapper = ExerciseSetsMapper.INSTANCE;
             logger.debug("Converting ExerciseSetDTO to ExerciseSets entity");
             ExerciseSets exerciseSets = exerciseSetsMapper.ExerciseSetDTOToExerciseSets(exerciseSetDTO);
+
+            Exercise exercise = exerciseRepository.findById(exerciseSetDTO.getExerciseId()).get();
+            Workout workout = workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get();
+
+            exerciseSets.setExercise(exercise);
+            exerciseSets.setWorkout(workout);
+
             logger.debug("Conversion complete: {}", exerciseSets);
 
             ExerciseSets savedExerciseSets = exerciseSetsRepository.save(exerciseSets);

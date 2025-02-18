@@ -3,7 +3,6 @@ package com.example.WorkoutTrackingApp.service;
 import com.example.WorkoutTrackingApp.Mapper.ExerciseMapper;
 import com.example.WorkoutTrackingApp.dto.ExerciseDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
-import com.example.WorkoutTrackingApp.entity.ExerciseSets;
 import com.example.WorkoutTrackingApp.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
