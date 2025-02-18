@@ -3,6 +3,7 @@ package com.example.WorkoutTrackingApp.controller;
 import com.example.WorkoutTrackingApp.dto.ExerciseDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.service.ExerciseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -26,7 +27,7 @@ public class ExerciseController {
 
     @PostMapping()
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> createExercise(@RequestBody ExerciseDTO exerciseDTO) {
+    public ResponseEntity<?> createExercise(@Valid @RequestBody ExerciseDTO exerciseDTO) {
         ResponseEntity<?> responseEntity = exerciseService.createExercise(exerciseDTO);
         return responseEntity;
     }
@@ -44,7 +45,7 @@ public class ExerciseController {
 
     @PutMapping("/{id}")
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Exercise> updateExercise(
+    public ResponseEntity<Exercise> updateExercise(@Valid
             @PathVariable Integer id,
             @RequestBody ExerciseDTO exerciseDTO) {
         return ResponseEntity.ok(exerciseService.updateExercise(id, exerciseDTO));

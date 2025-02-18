@@ -4,6 +4,7 @@ import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
 import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.service.WorkoutService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class WorkoutController {
     private final WorkoutService workoutService;
 
     @PostMapping
-    public ResponseEntity<?> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
+    public ResponseEntity<?> createWorkout(@Valid @RequestBody WorkoutDTO workoutDTO) {
         ResponseEntity<?> responseEntity = workoutService.createWorkout(workoutDTO);
         return responseEntity;
     }
@@ -47,7 +48,7 @@ public class WorkoutController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateWorkout(@PathVariable Integer id, @RequestBody UpdateWorkoutDTO updateWorkoutDTO) {
+    public ResponseEntity<?> updateWorkout(@Valid @PathVariable Integer id, @RequestBody UpdateWorkoutDTO updateWorkoutDTO) {
         ResponseEntity<?> responseEntity = workoutService.updateWorkout(id, updateWorkoutDTO);
         return responseEntity;
     }
