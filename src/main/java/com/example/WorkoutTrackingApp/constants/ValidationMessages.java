@@ -1,7 +1,5 @@
 package com.example.WorkoutTrackingApp.constants;
 
-import org.springframework.security.web.webauthn.api.PublicKeyCose;
-
 public class ValidationMessages {
 
     public static final String NAME_REQUIRED = "Name is required";
