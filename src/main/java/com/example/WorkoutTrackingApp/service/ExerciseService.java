@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ExerciseService {
 
-    ResponseEntity<?> createExercise(ExerciseDTO exerciseDTO);
+    Exercise createExercise(ExerciseDTO exerciseDTO);
 
-    ResponseEntity<?> getExerciseById(Integer id);
+    Exercise getExerciseById(Integer id);
 
     List<Exercise> getAllExercises();
 
