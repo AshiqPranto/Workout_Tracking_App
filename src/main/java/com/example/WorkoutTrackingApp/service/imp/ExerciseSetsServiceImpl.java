@@ -1,4 +1,4 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.service.imp;
 
 import com.example.WorkoutTrackingApp.Mapper.ExerciseSetsMapper;
 import com.example.WorkoutTrackingApp.dto.ExerciseSetDTO;
@@ -8,6 +8,7 @@ import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.repository.ExerciseRepository;
 import com.example.WorkoutTrackingApp.repository.ExerciseSetsRepository;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
+import com.example.WorkoutTrackingApp.service.ExerciseSetsService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

@@ -1,19 +1,17 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.service.imp;
 
 import com.example.WorkoutTrackingApp.Mapper.ExerciseMapper;
 import com.example.WorkoutTrackingApp.dto.ExerciseDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import com.example.WorkoutTrackingApp.repository.ExerciseRepository;
+import com.example.WorkoutTrackingApp.service.ExerciseService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service

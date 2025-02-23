@@ -1,4 +1,4 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.service.imp;
 
 import com.example.WorkoutTrackingApp.Mapper.WorkoutMapper;
 import com.example.WorkoutTrackingApp.auth.entity.User;
@@ -8,6 +8,7 @@ import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
 import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
+import com.example.WorkoutTrackingApp.service.WorkoutService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
