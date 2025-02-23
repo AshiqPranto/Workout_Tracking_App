@@ -20,8 +20,8 @@ public class WorkoutController {
 
     @PostMapping
     public ResponseEntity<?> createWorkout(@Valid @RequestBody WorkoutDTO workoutDTO) {
-        ResponseEntity<?> responseEntity = workoutService.createWorkout(workoutDTO);
-        return responseEntity;
+        Workout createdWorkout = workoutService.createWorkout(workoutDTO);
+        return ResponseEntity.status(201).body(createdWorkout);
     }
 
     @GetMapping("/{id}")
@@ -45,11 +45,10 @@ public class WorkoutController {
         return ResponseEntity.ok(workouts);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateWorkout(@Valid @PathVariable Integer id, @RequestBody UpdateWorkoutDTO updateWorkoutDTO) {
-        ResponseEntity<?> responseEntity = workoutService.updateWorkout(id, updateWorkoutDTO);
-        return responseEntity;
+        Workout updatedWorkout = workoutService.updateWorkout(id, updateWorkoutDTO);
+        return ResponseEntity.ok(updatedWorkout);
     }
 
     @DeleteMapping("/{id}")

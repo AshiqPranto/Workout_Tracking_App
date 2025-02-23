@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface WorkoutService {
 
-    ResponseEntity<?> createWorkout(WorkoutDTO workoutDTO);
+    Workout createWorkout(WorkoutDTO workoutDTO);
 
     Workout getWorkoutById(Integer id);
 
@@ -19,7 +19,7 @@ public interface WorkoutService {
 
     List<Workout> getAllWorkoutsByExerciseId(Integer exerciseId);
 
-    ResponseEntity<?> updateWorkout(Integer id, UpdateWorkoutDTO updateWorkoutDTO);
+    Workout updateWorkout(Integer id, UpdateWorkoutDTO updateWorkoutDTO);
 
     void deleteWorkout(Integer id);
 }
