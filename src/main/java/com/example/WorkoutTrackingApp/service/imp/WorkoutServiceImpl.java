@@ -42,7 +42,6 @@ public class WorkoutServiceImpl implements WorkoutService {
             log.error("User is not authenticated");
             throw new RuntimeException("User is not authenticated");
         }
-//        User user = userRepository.findByEmail(userName).get();
         User user = userRepository.findByEmailAndIsDeletedFalse(userName)
                         .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userName));
 

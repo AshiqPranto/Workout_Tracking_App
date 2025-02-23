@@ -59,7 +59,6 @@ public class UserServiceImp implements UserService {
 
     public User findUserByEmail(String email) {
         log.info("Fetching user by email: {}", email);
-//        return userRepository.findByEmail(email).orElse(new User());
         User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " not found"));
         return user;
