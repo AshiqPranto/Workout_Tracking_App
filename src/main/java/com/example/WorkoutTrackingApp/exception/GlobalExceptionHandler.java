@@ -40,4 +40,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGlobalException(Exception ex) {
         return new ResponseEntity<>("An internal server error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<?> handleInternalServerErrorException(InternalServerErrorException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

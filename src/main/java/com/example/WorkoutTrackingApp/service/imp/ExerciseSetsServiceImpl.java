@@ -5,6 +5,7 @@ import com.example.WorkoutTrackingApp.dto.ExerciseSetDTO;
 import com.example.WorkoutTrackingApp.entity.Exercise;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
 import com.example.WorkoutTrackingApp.entity.Workout;
+import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import com.example.WorkoutTrackingApp.repository.ExerciseRepository;
 import com.example.WorkoutTrackingApp.repository.ExerciseSetsRepository;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
@@ -13,8 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,49 +29,36 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
     private final WorkoutRepository workoutRepository;
 
     @Override
-    public ResponseEntity<?> createExerciseSet(ExerciseSetDTO exerciseSetDTO) {
+    public ExerciseSets createExerciseSet(ExerciseSetDTO exerciseSetDTO) {
         logger.info("Creating ExerciseSet with Exercise ID: {} and Workout ID: {}",
                 exerciseSetDTO.getExerciseId(), exerciseSetDTO.getWorkoutId());
-        try {
-            ExerciseSetsMapper exerciseSetsMapper = ExerciseSetsMapper.INSTANCE;
-            logger.debug("Converting ExerciseSetDTO to ExerciseSets entity");
-            ExerciseSets exerciseSets = exerciseSetsMapper.ExerciseSetDTOToExerciseSets(exerciseSetDTO);
 
-            Exercise exercise = exerciseRepository.findById(exerciseSetDTO.getExerciseId()).get();
-            Workout workout = workoutRepository.findById(exerciseSetDTO.getWorkoutId()).get();
+        ExerciseSetsMapper exerciseSetsMapper = ExerciseSetsMapper.INSTANCE;
+        logger.debug("Converting ExerciseSetDTO to ExerciseSets entity");
+        ExerciseSets exerciseSets = exerciseSetsMapper.ExerciseSetDTOToExerciseSets(exerciseSetDTO);
 
-            exerciseSets.setExercise(exercise);
-            exerciseSets.setWorkout(workout);
+        Exercise exercise = exerciseRepository.findByIdAndIsDeletedFalse(exerciseSetDTO.getExerciseId())
+                .orElseThrow(() -> new ResourceNotFoundException("Exercise not found with id: " + exerciseSetDTO.getExerciseId()));
+        Workout workout = workoutRepository.findByIdAndIsDeletedFalse(exerciseSetDTO.getWorkoutId())
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found with id: " + exerciseSetDTO.getWorkoutId()));
 
-            logger.debug("Conversion complete: {}", exerciseSets);
+        exerciseSets.setExercise(exercise);
+        exerciseSets.setWorkout(workout);
 
-            ExerciseSets savedExerciseSets = exerciseSetsRepository.save(exerciseSets);
+        ExerciseSets savedExerciseSets = exerciseSetsRepository.save(exerciseSets);
 
-            logger.debug("ExerciseSet created successfully with ID: {}", savedExerciseSets.getId());
+        logger.debug("ExerciseSet created successfully with ID: {}", savedExerciseSets.getId());
 
-            return new ResponseEntity<>(savedExerciseSets, HttpStatus.CREATED);
-        } catch (Exception e) {
-            logger.error("Error while creating ExerciseSet: {}", e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-        }
+        return savedExerciseSets;
     }
 
     @Override
     public ExerciseSets getExerciseSetById(Integer id) {
         logger.info("Fetching ExerciseSet with ID: {}", id);
 
-        ExerciseSets exerciseSets = null;
-        try{
-            exerciseSets = exerciseSetsRepository.findByIdAndIsDeletedFalse(id);
-        }
-        catch (EntityNotFoundException e){
-            logger.error("EntityNotFoundException while fetching ExerciseSet with ID {}: {}", id, e.getMessage());
-            throw new EntityNotFoundException("Exercise Sets not found..! May be deleted already..!");
-        }
-        catch (Exception e){
-            logger.error("Unexpected error while fetching ExerciseSet with ID {}: {}", id, e.getMessage(), e);
-            System.out.println(e.getMessage());
-        }
+        ExerciseSets exerciseSets = exerciseSetsRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ExerciseSet not found with ID: " + id));
+
         return exerciseSets;
     }
 
@@ -119,20 +105,15 @@ public class ExerciseSetsServiceImpl implements ExerciseSetsService {
     }
 
     @Override
-    public ResponseEntity<?> updateExerciseSet(Integer id, ExerciseSetDTO exerciseSetDTO) {
+    public ExerciseSets updateExerciseSet(Integer id, ExerciseSetDTO exerciseSetDTO) {
         logger.info("Updating ExerciseSet with ID: {}", id);
-        try {
-            ExerciseSets existingExerciseSet = getExerciseSetById(id);
-            existingExerciseSet = setPropertyToExistingExercise(existingExerciseSet, exerciseSetDTO);
+        ExerciseSets existingExerciseSet = getExerciseSetById(id);
+        existingExerciseSet = setPropertyToExistingExercise(existingExerciseSet, exerciseSetDTO);
 
-            ExerciseSets updatedExerciseSet = exerciseSetsRepository.save(existingExerciseSet);
-            logger.info("ExerciseSet updated successfully with ID: {}", updatedExerciseSet.getId());
+        ExerciseSets updatedExerciseSet = exerciseSetsRepository.save(existingExerciseSet);
+        logger.info("ExerciseSet updated successfully with ID: {}", updatedExerciseSet.getId());
 
-            return new ResponseEntity<>(updatedExerciseSet, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Error updating ExerciseSet with ID {}: {}", id, e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        return updatedExerciseSet;
     }
 
     private ExerciseSets setPropertyToExistingExercise(ExerciseSets existingExerciseSet, ExerciseSetDTO exerciseSetDTO) {

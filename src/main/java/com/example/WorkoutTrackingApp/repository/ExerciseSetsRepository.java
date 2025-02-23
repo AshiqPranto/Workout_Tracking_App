@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExerciseSetsRepository extends JpaRepository<ExerciseSets, Integer> {
@@ -19,7 +20,7 @@ public interface ExerciseSetsRepository extends JpaRepository<ExerciseSets, Inte
 
     List<ExerciseSets> findAllByIsDeletedFalse();
 
-    ExerciseSets findByIdAndIsDeletedFalse(Integer exerciseSetsId);
+    Optional<ExerciseSets> findByIdAndIsDeletedFalse(Integer exerciseSetsId);
 
     @Query("SELECT es FROM ExerciseSets es WHERE es.workout.user.id = :userId AND es.isDeleted = false")
     List<ExerciseSets> findAllByUserId(@Param("userId") Integer userId);

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ExerciseSetsService {
 
-    ResponseEntity<?> createExerciseSet(ExerciseSetDTO exerciseSetDTO);
+    ExerciseSets createExerciseSet(ExerciseSetDTO exerciseSetDTO);
 
     ExerciseSets getExerciseSetById(Integer id);
 
@@ -23,7 +23,7 @@ public interface ExerciseSetsService {
 
     List<ExerciseSets> getAllByExerciseIdAndUserId(Integer exerciseId, Integer userId);
 
-    ResponseEntity<?> updateExerciseSet(Integer id, ExerciseSetDTO exerciseSetDTO);
+    ExerciseSets updateExerciseSet(Integer id, ExerciseSetDTO exerciseSetDTO);
 
     void deleteExerciseSet(Integer id);
 }
