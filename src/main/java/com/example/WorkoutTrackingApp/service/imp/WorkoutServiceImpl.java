@@ -1,4 +1,4 @@
-package com.example.WorkoutTrackingApp.service;
+package com.example.WorkoutTrackingApp.service.imp;
 
 import com.example.WorkoutTrackingApp.Mapper.WorkoutMapper;
 import com.example.WorkoutTrackingApp.auth.entity.User;
@@ -7,7 +7,9 @@ import com.example.WorkoutTrackingApp.auth.service.JwtService;
 import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
 import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.Workout;
+import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
+import com.example.WorkoutTrackingApp.service.WorkoutService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,36 +30,34 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final JwtService jwtService;
 
     @Override
-    public ResponseEntity<?> createWorkout(WorkoutDTO workoutDTO) {
+    public Workout createWorkout(WorkoutDTO workoutDTO) {
         log.info("Creating a new workout: {}", workoutDTO.getName());
-        try {
-            WorkoutMapper workoutMapper = WorkoutMapper.INSTANCE;
-            Workout workout = workoutMapper.workoutDTOToWorkout(workoutDTO);
+        WorkoutMapper workoutMapper = WorkoutMapper.INSTANCE;
+        Workout workout = workoutMapper.workoutDTOToWorkout(workoutDTO);
 
-            String userName = AuthUtil.getAuthenticatedUserName();
-            log.debug("Extracted authenticated user: {}", userName);
+        String userName = AuthUtil.getAuthenticatedUserName();
+        log.debug("Extracted authenticated user: {}", userName);
 
-            if (userName == null) {
-                log.error("User is not authenticated");
-                throw new RuntimeException("User is not authenticated");
-            }
-            User user = userRepository.findByEmail(userName).get();
-            workout.setUser(user);
-
-            workout = workoutRepository.save(workout);
-            log.info("Workout created successfully with ID: {}", workout.getId());
-
-            return new ResponseEntity<Workout>(workout, HttpStatus.CREATED);
-        } catch (Exception e) {
-            log.error("Error while creating workout: {}", e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        if (userName == null) {
+            log.error("User is not authenticated");
+            throw new RuntimeException("User is not authenticated");
         }
+//        User user = userRepository.findByEmail(userName).get();
+        User user = userRepository.findByEmailAndIsDeletedFalse(userName)
+                        .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userName));
+
+        workout.setUser(user);
+        workout = workoutRepository.save(workout);
+        log.info("Workout created successfully with ID: {}", workout.getId());
+
+        return workout;
     }
 
     @Override
     public Workout getWorkoutById(Integer id) {
         log.info("Fetching workout by ID: {}", id);
-        return workoutRepository.findByIdAndIsDeletedFalse(id).get();
+        return workoutRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found with ID: " + id));
     }
 
     @Override
@@ -84,33 +84,26 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public ResponseEntity<?> updateWorkout(Integer id, UpdateWorkoutDTO updateWorkoutDTO) {
+    public Workout updateWorkout(Integer id, UpdateWorkoutDTO updateWorkoutDTO) {
         log.info("Updating workout ID: {}", id);
-        try {
-            Workout existingWorkout = getWorkoutById(id);
-            existingWorkout.setName(updateWorkoutDTO.getName());
-            existingWorkout.setEndTime(updateWorkoutDTO.getEndTime());
+        Workout existingWorkout = getWorkoutById(id);
 
-            Workout updatedWorkout = workoutRepository.save(existingWorkout);
-            log.info("Workout updated successfully: ID: {}, Name: {}", updatedWorkout.getId(), updatedWorkout.getName());
+        existingWorkout.setName(updateWorkoutDTO.getName());
+        existingWorkout.setEndTime(updateWorkoutDTO.getEndTime());
 
-            return new ResponseEntity<Workout>(updatedWorkout, HttpStatus.CREATED);
-        } catch (Exception e) {
-            log.error("Error updating workout ID: {}: {}", id, e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        Workout updatedWorkout = workoutRepository.save(existingWorkout);
+        log.info("Workout updated successfully: ID: {}, Name: {}", updatedWorkout.getId(), updatedWorkout.getName());
+
+        return updatedWorkout;
     }
 
     @Override
     public void deleteWorkout(Integer id) {
         log.info("Deleting workout ID: {}", id);
 
-        if (!workoutRepository.existsById(id)) {
-            log.error("Workout not found with ID: {}", id);
-            throw new EntityNotFoundException("Workout not found with id: " + id);
-        }
+        Workout workout = workoutRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found with ID: " + id));
 
-        Workout workout = workoutRepository.findByIdAndIsDeletedFalse(id).get();
         workout.setDeleted(true);
         workoutRepository.save(workout);
         log.info("Workout successfully soft-deleted with ID: {}", id);

@@ -6,7 +6,6 @@ import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.service.WorkoutService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +20,8 @@ public class WorkoutController {
 
     @PostMapping
     public ResponseEntity<?> createWorkout(@Valid @RequestBody WorkoutDTO workoutDTO) {
-        ResponseEntity<?> responseEntity = workoutService.createWorkout(workoutDTO);
-        return responseEntity;
+        Workout createdWorkout = workoutService.createWorkout(workoutDTO);
+        return ResponseEntity.status(201).body(createdWorkout);
     }
 
     @GetMapping("/{id}")
@@ -35,7 +34,7 @@ public class WorkoutController {
         return ResponseEntity.ok(workoutService.getAllWorkouts());
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/get-by-user/{userId}")
     public ResponseEntity<List<Workout>> getWorkoutsByUserId(@PathVariable Integer userId) {
         return ResponseEntity.ok(workoutService.getWorkoutsByUserId(userId));
     }
@@ -46,11 +45,10 @@ public class WorkoutController {
         return ResponseEntity.ok(workouts);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateWorkout(@Valid @PathVariable Integer id, @RequestBody UpdateWorkoutDTO updateWorkoutDTO) {
-        ResponseEntity<?> responseEntity = workoutService.updateWorkout(id, updateWorkoutDTO);
-        return responseEntity;
+        Workout updatedWorkout = workoutService.updateWorkout(id, updateWorkoutDTO);
+        return ResponseEntity.ok(updatedWorkout);
     }
 
     @DeleteMapping("/{id}")

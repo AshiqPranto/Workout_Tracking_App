@@ -27,15 +27,15 @@ public class ExerciseController {
 
     @PostMapping()
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> createExercise(@Valid @RequestBody ExerciseDTO exerciseDTO) {
-        ResponseEntity<?> responseEntity = exerciseService.createExercise(exerciseDTO);
-        return responseEntity;
+    public ResponseEntity<Exercise> createExercise(@Valid @RequestBody ExerciseDTO exerciseDTO) {
+        Exercise exercise = exerciseService.createExercise(exerciseDTO);
+        return new ResponseEntity<>(exercise, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getExerciseById(@PathVariable Integer id) {
-        ResponseEntity<?> responseEntity = exerciseService.getExerciseById(id);
-        return responseEntity;
+    public ResponseEntity<Exercise> getExerciseById(@PathVariable Integer id) {
+        Exercise exercise = exerciseService.getExerciseById(id);
+        return ResponseEntity.ok(exercise);
     }
 
     @GetMapping
