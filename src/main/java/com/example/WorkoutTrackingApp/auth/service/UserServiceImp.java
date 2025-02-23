@@ -3,6 +3,7 @@ package com.example.WorkoutTrackingApp.auth.service;
 import com.example.WorkoutTrackingApp.auth.dto.UserUpdateDto;
 import com.example.WorkoutTrackingApp.auth.entity.User;
 import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
+import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,48 +36,46 @@ public class UserServiceImp implements UserService {
     public List<User> getAll() {
         log.info("Fetching all users");
         List<User> users = userRepository.findAllByIsDeletedFalseOrderByEmailAsc().orElse(Collections.emptyList());
-        log.debug("Fetched {} users", users.size());
+        log.info("Fetched {} users", users.size());
         return users;
     }
 
     public User findUserById(Long id) {
         log.info("Fetching user by ID: {}", id);
-        return userRepository.findByIdAndIsDeletedFalse(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return userRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
     }
 
     @Override
-    public ResponseEntity<?> deleteUserById(Long id) {
+    public void deleteUserById(Long id) {
         log.info("Deleting user by ID: {}", id);
 
-        try {
-//            userRepository.deleteById(id);
-            User user = findUserById(id);
+            User user = userRepository.findByIdAndIsDeletedFalse(id)
+                            .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
             user.setDeleted(true);
             userRepository.save(user);
             log.info("User soft deleted successfully with ID: {}", id);
-        } catch (Exception e) {
-            log.error("Error deleting user with ID {}: {}", id, e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(Map.of("message: ", "Detele Successfully"), HttpStatus.OK);
     }
 
     public User findUserByEmail(String email) {
         log.info("Fetching user by email: {}", email);
-        return userRepository.findByEmail(email).orElse(new User());
+//        return userRepository.findByEmail(email).orElse(new User());
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " not found"));
+        return user;
     }
 
     public boolean checkIfEmailExists(String email) {
         log.debug("Checking if email exists: {}", email);
-        boolean exists = userRepository.findByEmail(email).isPresent();
+        boolean exists = userRepository.findByEmailAndIsDeletedFalse(email).isPresent();
         log.debug("Email exists: {}", exists);
         return exists;
     }
 
     public UserUpdateDto updateUser(Long id, UserUpdateDto userDto) {
         log.info("Updating user with ID: {}", id);
-        User user = userRepository.findById(id)
-                .orElse(new User());
+        User user = userRepository.findByIdAndIsDeletedFalse(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
 
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
