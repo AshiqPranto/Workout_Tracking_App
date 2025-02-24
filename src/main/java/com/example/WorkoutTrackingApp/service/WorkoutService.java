@@ -22,4 +22,6 @@ public interface WorkoutService {
     Workout updateWorkout(Integer id, UpdateWorkoutDTO updateWorkoutDTO);
 
     void deleteWorkout(Integer id);
+
+    void endWorkout(Integer id);
 }

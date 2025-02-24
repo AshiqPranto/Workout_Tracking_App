@@ -56,4 +56,10 @@ public class WorkoutController {
         workoutService.deleteWorkout(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/end-workout/{id}")
+    public ResponseEntity<Void> endWorkout(@PathVariable Integer id) {
+        workoutService.endWorkout(id);
+        return ResponseEntity.noContent().build();
+    }
 }

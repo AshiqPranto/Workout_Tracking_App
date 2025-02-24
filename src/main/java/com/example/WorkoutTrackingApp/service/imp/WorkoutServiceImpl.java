@@ -6,9 +6,11 @@ import com.example.WorkoutTrackingApp.auth.repository.UserRepository;
 import com.example.WorkoutTrackingApp.auth.service.JwtService;
 import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
 import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
+import com.example.WorkoutTrackingApp.entity.ExerciseSets;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
+import com.example.WorkoutTrackingApp.service.ExerciseSetsService;
 import com.example.WorkoutTrackingApp.service.WorkoutService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +32,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final ExerciseSetsService exerciseSetsService;
 
     @Override
     public Workout createWorkout(WorkoutDTO workoutDTO) {
@@ -106,5 +111,16 @@ public class WorkoutServiceImpl implements WorkoutService {
         workout.setDeleted(true);
         workoutRepository.save(workout);
         log.info("Workout successfully soft-deleted with ID: {}", id);
+    }
+
+    @Override
+    public void endWorkout(Integer id) {
+        log.info("Ending workout with ID: {}", id);
+
+        Workout workout = getWorkoutById(id);
+        workout.setEndTime(LocalDateTime.now());
+
+        workoutRepository.save(workout);
+        log.info("Workout successfully ended with ID: {}", id);
     }
 }
