@@ -7,10 +7,14 @@ import com.example.WorkoutTrackingApp.auth.service.JwtService;
 import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
 import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
+import com.example.WorkoutTrackingApp.entity.PersonalRecord;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
+import com.example.WorkoutTrackingApp.repository.PersonalRecordRepository;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
+import com.example.WorkoutTrackingApp.service.ExerciseService;
 import com.example.WorkoutTrackingApp.service.ExerciseSetsService;
+import com.example.WorkoutTrackingApp.service.PersonalRecordService;
 import com.example.WorkoutTrackingApp.service.WorkoutService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,10 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final ExerciseSetsService exerciseSetsService;
+    private final PersonalRecordService personalRecordService;
+    private final AuthUtil authUtil;
+    private final ExerciseService exerciseService;
+    private final PersonalRecordRepository personalRecordRepository;
 
     @Override
     public Workout createWorkout(WorkoutDTO workoutDTO) {
@@ -122,5 +131,66 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         workoutRepository.save(workout);
         log.info("Workout successfully ended with ID: {}", id);
+
+        checkPersonalRecords(id);
     }
+
+    public void checkPersonalRecords(Integer workoutId) {
+        log.info("Checking for new personal records from workout ID: {}", workoutId);
+
+        List<ExerciseSets> exerciseSets = exerciseSetsService.getExerciseSetsByWorkoutId(workoutId);
+
+        if (exerciseSets.isEmpty()) {
+            log.info("No exercise sets found for workout ID: {}", workoutId);
+            return;
+        }
+        Integer currentUserId = authUtil.getAuthenticatedUserId();
+
+        for(ExerciseSets exerciseSet : exerciseSets) {
+            Integer exerciseId = exerciseSet.getExercise().getId();
+            Optional<PersonalRecord> existingPersonalRecordOpt = personalRecordService.getPersonalRecordByExerciseIdandUserId(
+                    exerciseId, currentUserId);
+
+            if(existingPersonalRecordOpt.isEmpty()) {
+                createNewPersonalRecord(currentUserId, exerciseSet);
+            } else {
+                updatePersonalRecordIfBetter(existingPersonalRecordOpt.get(), exerciseSet);
+            }
+        }
+    }
+    private void createNewPersonalRecord(Integer userId, ExerciseSets exerciseSet) {
+        log.info("Creating new personal record for user ID: {} and exercise ID: {}", userId, exerciseSet.getExercise().getId());
+
+        PersonalRecord newRecord = new PersonalRecord().builder()
+                .reps(exerciseSet.getReps())
+                .weights(exerciseSet.getWeights())
+                .exercise(exerciseSet.getExercise())
+                .user(exerciseSet.getWorkout().getUser())
+                .build();
+
+        personalRecordService.createPersonalRecord(newRecord);
+        log.info("New personal record created for exercise ID: {}", exerciseSet.getExercise().getId());
+    }
+
+    private void updatePersonalRecordIfBetter(PersonalRecord personalRecord, ExerciseSets exerciseSet) {
+        boolean updated = false;
+
+        if (exerciseSet.getReps() > personalRecord.getReps()) {
+            personalRecord.setReps(exerciseSet.getReps());
+            updated = true;
+            log.info("Updated reps personal record for exercise ID: {} to {}", exerciseSet.getExercise().getId(), exerciseSet.getReps());
+        }
+
+        if (exerciseSet.getWeights() > personalRecord.getWeights()) {
+            personalRecord.setWeights(exerciseSet.getWeights());
+            updated = true;
+            log.info("Updated weights personal record for exercise ID: {} to {}", exerciseSet.getExercise().getId(), exerciseSet.getWeights());
+        }
+
+        if (updated) {
+            personalRecordRepository.save(personalRecord);
+            log.info("Personal record updated for exercise ID: {}", exerciseSet.getExercise().getId());
+        }
+    }
+
 }

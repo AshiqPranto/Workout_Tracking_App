@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ExerciseSetsRepository extends JpaRepository<ExerciseSets, Integer> {
 
-
     List<ExerciseSets> findByExerciseIdAndIsDeletedFalse(Integer exerciseId);
 
     List<ExerciseSets> findByWorkoutIdAndIsDeletedFalse(Integer workoutId);
