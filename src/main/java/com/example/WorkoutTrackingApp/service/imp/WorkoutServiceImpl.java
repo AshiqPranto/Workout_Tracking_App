@@ -20,11 +20,8 @@ import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -173,24 +170,30 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     private void updatePersonalRecordIfBetter(PersonalRecord personalRecord, ExerciseSets exerciseSet) {
-        boolean updated = false;
-
-        if (exerciseSet.getReps() > personalRecord.getReps()) {
-            personalRecord.setReps(exerciseSet.getReps());
-            updated = true;
-            log.info("Updated reps personal record for exercise ID: {} to {}", exerciseSet.getExercise().getId(), exerciseSet.getReps());
-        }
-
-        if (exerciseSet.getWeights() > personalRecord.getWeights()) {
-            personalRecord.setWeights(exerciseSet.getWeights());
-            updated = true;
-            log.info("Updated weights personal record for exercise ID: {} to {}", exerciseSet.getExercise().getId(), exerciseSet.getWeights());
-        }
+        boolean updated = isThisNewMaxWeights(personalRecord, exerciseSet) | isThisNewMaxReps(personalRecord, exerciseSet);
 
         if (updated) {
             personalRecordRepository.save(personalRecord);
             log.info("Personal record updated for exercise ID: {}", exerciseSet.getExercise().getId());
         }
+    }
+
+    private static boolean isThisNewMaxWeights(PersonalRecord personalRecord, ExerciseSets exerciseSet) {
+        if (exerciseSet.getWeights() > personalRecord.getWeights()) {
+            personalRecord.setWeights(exerciseSet.getWeights());
+            log.info("Updated weights personal record for exercise ID: {} to {}", exerciseSet.getExercise().getId(), exerciseSet.getWeights());
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isThisNewMaxReps(PersonalRecord personalRecord, ExerciseSets exerciseSet) {
+        if (exerciseSet.getReps() > personalRecord.getReps()) {
+            personalRecord.setReps(exerciseSet.getReps());
+            log.info("Updated reps personal record for exercise ID: {} to {}", exerciseSet.getExercise().getId(), exerciseSet.getReps());
+            return true;
+        }
+        return false;
     }
 
 }
