@@ -2,11 +2,13 @@ package com.example.WorkoutTrackingApp.auth.entity;
 
 import com.example.WorkoutTrackingApp.auth.Enum.Role;
 import com.example.WorkoutTrackingApp.entity.BaseEntity;
+import com.example.WorkoutTrackingApp.entity.PersonalRecord;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,6 +46,10 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Workout> workouts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PersonalRecord> personalRecords = new ArrayList<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

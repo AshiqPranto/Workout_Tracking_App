@@ -7,22 +7,24 @@ import com.example.WorkoutTrackingApp.auth.service.JwtService;
 import com.example.WorkoutTrackingApp.dto.UpdateWorkoutDTO;
 import com.example.WorkoutTrackingApp.dto.WorkoutDTO;
 import com.example.WorkoutTrackingApp.entity.ExerciseSets;
+import com.example.WorkoutTrackingApp.entity.PersonalRecord;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
+import com.example.WorkoutTrackingApp.repository.PersonalRecordRepository;
 import com.example.WorkoutTrackingApp.repository.WorkoutRepository;
+import com.example.WorkoutTrackingApp.service.ExerciseService;
 import com.example.WorkoutTrackingApp.service.ExerciseSetsService;
+import com.example.WorkoutTrackingApp.service.PersonalRecordService;
 import com.example.WorkoutTrackingApp.service.WorkoutService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final ExerciseSetsService exerciseSetsService;
+    private final PersonalRecordService personalRecordService;
+    private final AuthUtil authUtil;
+    private final ExerciseService exerciseService;
+    private final PersonalRecordRepository personalRecordRepository;
 
     @Override
     public Workout createWorkout(WorkoutDTO workoutDTO) {
@@ -122,5 +128,6 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         workoutRepository.save(workout);
         log.info("Workout successfully ended with ID: {}", id);
+
     }
 }

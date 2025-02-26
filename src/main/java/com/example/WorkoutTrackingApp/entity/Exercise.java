@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,5 +52,8 @@ public class Exercise extends BaseEntity {
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ExerciseSets> exerciseSets;
+
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
+    private List<PersonalRecord> personalRecords = new ArrayList<>();
 
 }
