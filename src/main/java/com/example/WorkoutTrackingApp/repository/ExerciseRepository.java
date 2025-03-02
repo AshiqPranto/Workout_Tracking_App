@@ -14,5 +14,4 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Integer> {
 
     Optional<Exercise> findByIdAndIsDeletedFalse(Integer id);
 
-
 }

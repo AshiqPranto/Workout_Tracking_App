@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface BodyMetricsRepository extends JpaRepository<BodyMetrics, Integer> {
 //    List<BodyMetrics> findByUserIdAndIsDeletedFalseOrderByTimestampDesc(Integer userId);
     Optional<BodyMetrics> findByIdAndIsDeletedFalse(Integer id);
+
+
 }

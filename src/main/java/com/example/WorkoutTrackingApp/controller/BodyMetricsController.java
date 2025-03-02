@@ -36,8 +36,8 @@ public class BodyMetricsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBodyMetrics(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteBodyMetrics(@PathVariable Integer id) {
         bodyMetricsService.deleteBodyMetrics(id);
-        return ResponseEntity.ok("Body Metrics entry deleted successfully.");
+        return ResponseEntity.noContent().build();
     }
 }

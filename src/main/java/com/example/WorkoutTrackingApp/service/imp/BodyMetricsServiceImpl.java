@@ -57,7 +57,11 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
 
     @Override
     public void deleteBodyMetrics(Integer id) {
-
+        log.info("Delete BodyMetrics by id: {}", id);
+        BodyMetrics bodyMetrics = getById(id);
+        bodyMetrics.setDeleted(true);
+        bodyMetricsRepository.save(bodyMetrics);
+        log.info("BodyMetrics with id {} has been deleted", id);
     }
 
     // Get all body metrics for the authenticated user
