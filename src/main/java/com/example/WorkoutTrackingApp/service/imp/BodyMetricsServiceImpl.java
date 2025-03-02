@@ -5,15 +5,19 @@ import com.example.WorkoutTrackingApp.auth.service.UserService;
 import com.example.WorkoutTrackingApp.dto.BodyMetricsDTO;
 import com.example.WorkoutTrackingApp.entity.BodyMetrics;
 import com.example.WorkoutTrackingApp.auth.entity.User;
+import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import com.example.WorkoutTrackingApp.repository.BodyMetricsRepository;
 import com.example.WorkoutTrackingApp.service.BodyMetricsService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
+@Slf4j
 @Service
 public class BodyMetricsServiceImpl implements BodyMetricsService {
 
@@ -36,6 +40,14 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
         bodyMetrics.setUser(user);
 
         return bodyMetricsRepository.save(bodyMetrics);
+    }
+
+    @Override
+    public BodyMetrics getById(Integer id) {
+        log.info("Get BodyMetrics by id: {}", id);
+        BodyMetrics bodyMetrics = bodyMetricsRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("BodyMetrics with id " + id + " not found"));
+        return bodyMetrics;
     }
 
     @Override

@@ -10,6 +10,8 @@ public interface BodyMetricsService {
 
     public BodyMetrics createBodyMetrics(BodyMetricsDTO bodyMetricsDTO);
 
+    public BodyMetrics getById(Integer id);
+
     public List<BodyMetricsDTO> getBodyMetricsHistory();
 
     public void deleteBodyMetrics(Integer id);
