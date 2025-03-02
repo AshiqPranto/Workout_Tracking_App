@@ -40,14 +40,14 @@ public class UserServiceImp implements UserService {
         return users;
     }
 
-    public User findUserById(Long id) {
+    public User findUserById(Integer id) {
         log.info("Fetching user by ID: {}", id);
         return userRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
     }
 
     @Override
-    public void deleteUserById(Long id) {
+    public void deleteUserById(Integer id) {
         log.info("Deleting user by ID: {}", id);
 
             User user = userRepository.findByIdAndIsDeletedFalse(id)
@@ -71,7 +71,7 @@ public class UserServiceImp implements UserService {
         return exists;
     }
 
-    public UserUpdateDto updateUser(Long id, UserUpdateDto userDto) {
+    public UserUpdateDto updateUser(Integer id, UserUpdateDto userDto) {
         log.info("Updating user with ID: {}", id);
         User user = userRepository.findByIdAndIsDeletedFalse(id)
                         .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
