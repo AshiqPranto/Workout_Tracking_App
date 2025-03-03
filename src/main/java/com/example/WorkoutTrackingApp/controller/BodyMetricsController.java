@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -42,8 +43,10 @@ public class BodyMetricsController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<BodyMetrics>> getBodyMetricsHistory() {
-        List<BodyMetrics> history = bodyMetricsService.getBodyMetricsHistory();
+    public ResponseEntity<List<BodyMetrics>> getBodyMetricsHistory(
+            @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate
+            ) {
+        List<BodyMetrics> history = bodyMetricsService.getBodyMetricsHistorybyDateRange(startDate, endDate);
         return ResponseEntity.ok(history);
     }
 }

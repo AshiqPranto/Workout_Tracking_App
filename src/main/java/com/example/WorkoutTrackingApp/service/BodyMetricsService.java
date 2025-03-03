@@ -4,6 +4,7 @@ import com.example.WorkoutTrackingApp.dto.BodyMetricsDTO;
 import com.example.WorkoutTrackingApp.entity.BodyMetrics;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BodyMetricsService {
@@ -14,7 +15,9 @@ public interface BodyMetricsService {
 
     public void deleteBodyMetrics(Integer id);
 
-    public List<BodyMetrics> getBodyMetricsHistory();
+    public List<BodyMetrics> getBodyMetricsHistorybyDateRange(
+            LocalDateTime startDate, LocalDateTime endDate
+    );
 
     public BodyMetrics getLatestBodyMetrics();
 

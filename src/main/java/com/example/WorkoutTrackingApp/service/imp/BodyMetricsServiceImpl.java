@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -51,10 +52,17 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
     }
 
     @Override
-    public List<BodyMetrics> getBodyMetricsHistory() {
+    public List<BodyMetrics> getBodyMetricsHistorybyDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         Integer currentUserId = authUtil.getAuthenticatedUserId();
         log.info("Get BodyMetrics history by userId: {}", currentUserId);
-        return bodyMetricsRepository.findAllByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(currentUserId);
+        if (startDate == null && endDate == null) {
+            log.info("Fetching All BodyMetrics history");
+            return bodyMetricsRepository.findAllByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(currentUserId);
+        }
+        log.info("Fetching BodyMetrics history by dateRange");
+        return bodyMetricsRepository.findAllByUserIdAndIsDeletedFalseAndCreatedAtBetweenOrderByCreatedAtDesc(
+                currentUserId, startDate, endDate
+        );
     }
 
     @Override
