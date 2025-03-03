@@ -40,4 +40,10 @@ public class BodyMetricsController {
         bodyMetricsService.deleteBodyMetrics(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/latest")
+    public ResponseEntity<BodyMetrics> getLatestBodyMetrics() {
+        BodyMetrics latestBodyMetrics = bodyMetricsService.getLatestBodyMetrics();
+        return new ResponseEntity<>(latestBodyMetrics, HttpStatus.OK);
+    }
 }

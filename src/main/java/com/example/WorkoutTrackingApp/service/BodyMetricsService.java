@@ -16,4 +16,6 @@ public interface BodyMetricsService {
 
     public List<BodyMetricsDTO> getBodyMetricsHistory();
 
+    public BodyMetrics getLatestBodyMetrics();
+
 }

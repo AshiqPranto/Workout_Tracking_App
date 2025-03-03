@@ -56,6 +56,16 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
     }
 
     @Override
+    public BodyMetrics getLatestBodyMetrics() {
+        Integer currentUserId = authUtil.getAuthenticatedUserId();
+        log.info("Get Latest BodyMetrics by id: {}", currentUserId);
+        BodyMetrics bodyMetrics = bodyMetricsRepository.findLatestByUserId(currentUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("BodyMetrics not found"));
+        log.info("Got Latest BodyMetrics : {}", bodyMetrics);
+        return bodyMetrics;
+    }
+
+    @Override
     public void deleteBodyMetrics(Integer id) {
         log.info("Delete BodyMetrics by id: {}", id);
         BodyMetrics bodyMetrics = getById(id);
@@ -72,12 +82,4 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
 //        return bodyMetricsList.stream().map(this::convertToDTO).collect(Collectors.toList());
 //    }
 //
-//    // Delete a body metric entry (Soft delete)
-//    public void deleteBodyMetrics(Integer id) {
-//        BodyMetrics bodyMetrics = bodyMetricsRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Body Metrics not found with ID: " + id));
-//
-//        bodyMetrics.setDeleted(true);
-//        bodyMetricsRepository.save(bodyMetrics);
-//    }
 }
