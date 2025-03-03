@@ -46,6 +46,7 @@ public class BodyMetricsController {
     public ResponseEntity<List<BodyMetrics>> getBodyMetricsHistory(
             @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate
             ) {
+
         List<BodyMetrics> history = bodyMetricsService.getBodyMetricsHistorybyDateRange(startDate, endDate);
         return ResponseEntity.ok(history);
     }

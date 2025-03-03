@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BodyMetricsRepository extends JpaRepository<BodyMetrics, Integer> {
-//    List<BodyMetrics> findByUserIdAndIsDeletedFalseOrderByTimestampDesc(Integer userId);
+
     Optional<BodyMetrics> findByIdAndIsDeletedFalse(Integer id);
 
     @Query("SELECT bm FROM BodyMetrics bm WHERE bm.user.id = :userId ORDER BY bm.createdAt DESC LIMIT 1")

@@ -5,6 +5,7 @@ import com.example.WorkoutTrackingApp.auth.service.UserService;
 import com.example.WorkoutTrackingApp.dto.BodyMetricsDTO;
 import com.example.WorkoutTrackingApp.entity.BodyMetrics;
 import com.example.WorkoutTrackingApp.auth.entity.User;
+import com.example.WorkoutTrackingApp.exception.BadRequestException;
 import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import com.example.WorkoutTrackingApp.repository.BodyMetricsRepository;
 import com.example.WorkoutTrackingApp.service.BodyMetricsService;
@@ -23,17 +24,18 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
     private final BodyMetricsRepository bodyMetricsRepository;
     private final AuthUtil authUtil;
     private final UserService userService;
-    BodyMetricsMapper bodyMetricsMapper = BodyMetricsMapper.INSTANCE;
+    private final BodyMetricsMapper bodyMetricsMapper = BodyMetricsMapper.INSTANCE;
+    private final Integer currentUserId;
 
     public BodyMetricsServiceImpl(BodyMetricsRepository bodyMetricsRepository, AuthUtil authUtil, UserService userService) {
         this.bodyMetricsRepository = bodyMetricsRepository;
         this.authUtil = authUtil;
         this.userService = userService;
+        currentUserId = authUtil.getAuthenticatedUserId();
     }
 
     public BodyMetrics createBodyMetrics(BodyMetricsDTO bodyMetricsDTO) {
-        Integer userId = authUtil.getAuthenticatedUserId();
-        User user = userService.findUserById(userId);
+        User user = userService.findUserById(currentUserId);
 
         BodyMetrics bodyMetrics = bodyMetricsMapper.bodyMetricsDtoToBodyMetrics(bodyMetricsDTO);
         bodyMetrics.setUser(user);
@@ -51,12 +53,15 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
 
     @Override
     public List<BodyMetrics> getBodyMetricsHistorybyDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        Integer currentUserId = authUtil.getAuthenticatedUserId();
         log.info("Get BodyMetrics history by userId: {}", currentUserId);
 
-        if (isRangeExcluded(startDate, endDate)) {
+        if (isDateRangeAbsent(startDate, endDate)) {
             log.info("Fetching All BodyMetrics history");
             return bodyMetricsRepository.findAllByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(currentUserId);
+        }
+
+        if(isStartDateAfterEndDate(startDate, endDate)) {
+            throw new BadRequestException("Start date must be before end date");
         }
 
         log.info("Fetching BodyMetrics history by dateRange");
@@ -65,13 +70,16 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
         );
     }
 
-    private static boolean isRangeExcluded(LocalDateTime startDate, LocalDateTime endDate) {
-        return startDate == null && endDate == null;
+    private boolean isStartDateAfterEndDate(LocalDateTime startDate, LocalDateTime endDate) {
+        return startDate.isAfter(endDate);
+    }
+
+    private static boolean isDateRangeAbsent(LocalDateTime startDate, LocalDateTime endDate) {
+        return startDate == null || endDate == null;
     }
 
     @Override
     public BodyMetrics getLatestBodyMetrics() {
-        Integer currentUserId = authUtil.getAuthenticatedUserId();
         log.info("Get Latest BodyMetrics by id: {}", currentUserId);
 
         BodyMetrics bodyMetrics = bodyMetricsRepository.findLatestByUserId(currentUserId)
@@ -86,6 +94,7 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
         log.info("Delete BodyMetrics by id: {}", id);
         BodyMetrics bodyMetrics = getById(id);
         bodyMetrics.setDeleted(true);
+
         bodyMetricsRepository.save(bodyMetrics);
         log.info("BodyMetrics with id {} has been deleted", id);
     }

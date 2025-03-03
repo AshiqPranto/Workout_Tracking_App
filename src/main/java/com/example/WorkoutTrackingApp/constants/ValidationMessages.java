@@ -1,7 +1,5 @@
 package com.example.WorkoutTrackingApp.constants;
 
-import java.security.PublicKey;
-
 public class ValidationMessages {
 
     public static final String NAME_REQUIRED = "Name is required";
