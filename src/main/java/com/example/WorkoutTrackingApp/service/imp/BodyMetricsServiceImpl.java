@@ -83,13 +83,4 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
         bodyMetricsRepository.save(bodyMetrics);
         log.info("BodyMetrics with id {} has been deleted", id);
     }
-
-    // Get all body metrics for the authenticated user
-//    public List<BodyMetricsDTO> getBodyMetricsHistory() {
-//        Integer userId = authUtil.getAuthenticatedUserId();
-//        List<BodyMetrics> bodyMetricsList = bodyMetricsRepository.findByUserIdAndIsDeletedFalseOrderByTimestampDesc(userId);
-//
-//        return bodyMetricsList.stream().map(this::convertToDTO).collect(Collectors.toList());
-//    }
-//
 }
