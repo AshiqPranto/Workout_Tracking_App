@@ -4,6 +4,7 @@ import com.example.WorkoutTrackingApp.entity.BodyMetrics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BodyMetricsRepository extends JpaRepository<BodyMetrics, Integer> {
@@ -12,4 +13,6 @@ public interface BodyMetricsRepository extends JpaRepository<BodyMetrics, Intege
 
     @Query("SELECT bm FROM BodyMetrics bm WHERE bm.user.id = :userId ORDER BY bm.createdAt DESC LIMIT 1")
     Optional<BodyMetrics> findLatestByUserId(Integer userId);
+
+    List<BodyMetrics> findAllByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(Integer userId);
 }

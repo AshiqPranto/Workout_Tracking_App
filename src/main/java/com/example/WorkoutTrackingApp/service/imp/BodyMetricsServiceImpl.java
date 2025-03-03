@@ -51,8 +51,10 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
     }
 
     @Override
-    public List<BodyMetricsDTO> getBodyMetricsHistory() {
-        return List.of();
+    public List<BodyMetrics> getBodyMetricsHistory() {
+        Integer currentUserId = authUtil.getAuthenticatedUserId();
+        log.info("Get BodyMetrics history by userId: {}", currentUserId);
+        return bodyMetricsRepository.findAllByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(currentUserId);
     }
 
     @Override

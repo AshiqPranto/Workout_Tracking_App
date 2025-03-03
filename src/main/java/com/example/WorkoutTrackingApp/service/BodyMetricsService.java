@@ -14,7 +14,7 @@ public interface BodyMetricsService {
 
     public void deleteBodyMetrics(Integer id);
 
-    public List<BodyMetricsDTO> getBodyMetricsHistory();
+    public List<BodyMetrics> getBodyMetricsHistory();
 
     public BodyMetrics getLatestBodyMetrics();
 

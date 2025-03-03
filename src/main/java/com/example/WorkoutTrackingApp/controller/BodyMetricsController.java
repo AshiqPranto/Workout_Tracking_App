@@ -29,12 +29,6 @@ public class BodyMetricsController {
         return new ResponseEntity<>(bodyMetrics, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<BodyMetricsDTO>> getBodyMetricsHistory() {
-        List<BodyMetricsDTO> history = bodyMetricsService.getBodyMetricsHistory();
-        return ResponseEntity.ok(history);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBodyMetrics(@PathVariable Integer id) {
         bodyMetricsService.deleteBodyMetrics(id);
@@ -45,5 +39,11 @@ public class BodyMetricsController {
     public ResponseEntity<BodyMetrics> getLatestBodyMetrics() {
         BodyMetrics latestBodyMetrics = bodyMetricsService.getLatestBodyMetrics();
         return new ResponseEntity<>(latestBodyMetrics, HttpStatus.OK);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<BodyMetrics>> getBodyMetricsHistory() {
+        List<BodyMetrics> history = bodyMetricsService.getBodyMetricsHistory();
+        return ResponseEntity.ok(history);
     }
 }
