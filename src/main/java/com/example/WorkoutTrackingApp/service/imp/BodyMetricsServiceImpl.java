@@ -9,9 +9,7 @@ import com.example.WorkoutTrackingApp.exception.ResourceNotFoundException;
 import com.example.WorkoutTrackingApp.repository.BodyMetricsRepository;
 import com.example.WorkoutTrackingApp.service.BodyMetricsService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -55,22 +53,30 @@ public class BodyMetricsServiceImpl implements BodyMetricsService {
     public List<BodyMetrics> getBodyMetricsHistorybyDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         Integer currentUserId = authUtil.getAuthenticatedUserId();
         log.info("Get BodyMetrics history by userId: {}", currentUserId);
-        if (startDate == null && endDate == null) {
+
+        if (isRangeExcluded(startDate, endDate)) {
             log.info("Fetching All BodyMetrics history");
             return bodyMetricsRepository.findAllByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(currentUserId);
         }
+
         log.info("Fetching BodyMetrics history by dateRange");
         return bodyMetricsRepository.findAllByUserIdAndIsDeletedFalseAndCreatedAtBetweenOrderByCreatedAtDesc(
                 currentUserId, startDate, endDate
         );
     }
 
+    private static boolean isRangeExcluded(LocalDateTime startDate, LocalDateTime endDate) {
+        return startDate == null && endDate == null;
+    }
+
     @Override
     public BodyMetrics getLatestBodyMetrics() {
         Integer currentUserId = authUtil.getAuthenticatedUserId();
         log.info("Get Latest BodyMetrics by id: {}", currentUserId);
+
         BodyMetrics bodyMetrics = bodyMetricsRepository.findLatestByUserId(currentUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("BodyMetrics not found"));
+
         log.info("Got Latest BodyMetrics : {}", bodyMetrics);
         return bodyMetrics;
     }
