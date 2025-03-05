@@ -1,6 +1,7 @@
 package com.example.WorkoutTrackingApp.service;
 
 import com.example.WorkoutTrackingApp.dto.BodyMetricDTO;
+import com.example.WorkoutTrackingApp.dto.BodyMetricHistoryDTO;
 import com.example.WorkoutTrackingApp.entity.BodyMetric;
 
 import java.time.LocalDateTime;
@@ -14,8 +15,8 @@ public interface BodyMetricService {
 
     public void deleteBodyMetric(Integer id);
 
-    public List<BodyMetric> getBodyMetricHistorybyDateRange(
-            LocalDateTime startDate, LocalDateTime endDate
+    public List<BodyMetricHistoryDTO> getBodyMetricHistory(
+            String field, LocalDateTime startDate, LocalDateTime endDate
     );
 
     public BodyMetric getLatestBodyMetric();

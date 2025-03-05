@@ -3,6 +3,7 @@ package com.example.WorkoutTrackingApp.service.imp;
 import com.example.WorkoutTrackingApp.Mapper.BodyMetricMapper;
 import com.example.WorkoutTrackingApp.auth.service.UserService;
 import com.example.WorkoutTrackingApp.dto.BodyMetricDTO;
+import com.example.WorkoutTrackingApp.dto.BodyMetricHistoryDTO;
 import com.example.WorkoutTrackingApp.entity.BodyMetric;
 import com.example.WorkoutTrackingApp.auth.entity.User;
 import com.example.WorkoutTrackingApp.exception.BadRequestException;
@@ -11,9 +12,11 @@ import com.example.WorkoutTrackingApp.repository.BodyMetricRepository;
 import com.example.WorkoutTrackingApp.service.BodyMetricService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -51,23 +54,54 @@ public class BodyMetricServiceImpl implements BodyMetricService {
     }
 
     @Override
-    public List<BodyMetric> getBodyMetricHistorybyDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+    public List<BodyMetricHistoryDTO> getBodyMetricHistory(String field, LocalDateTime startDate, LocalDateTime endDate) {
         Integer currentUserId = authUtil.getAuthenticatedUserId();
         log.info("Get BodyMetric history by userId: {}", currentUserId);
 
+        if (!isValidField(field)) {
+            throw new BadRequestException("Invalid field requested: " + field);
+        }
+
         if (isDateRangeAbsent(startDate, endDate)) {
-            log.info("Fetching All BodyMetric history");
-            return bodyMetricRepository.findAllByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(currentUserId);
+            throw new BadRequestException("Start date and end date must be include");
         }
 
         if(isStartDateAfterEndDate(startDate, endDate)) {
             throw new BadRequestException("Start date must be before end date");
         }
 
-        log.info("Fetching BodyMetric history by dateRange");
-        return bodyMetricRepository.findAllByUserIdAndIsDeletedFalseAndCreatedAtBetweenOrderByCreatedAtDesc(
-                currentUserId, startDate, endDate
-        );
+        log.info("Fetching BodyMetric history for field: {} in date range", field);
+        return fetchHistory(currentUserId, field, startDate, endDate);
+    }
+
+    private List<BodyMetricHistoryDTO> fetchHistory(Integer currentUserId, String field, LocalDateTime startDate, LocalDateTime endDate) {
+        log.info("Fetching BodyMetric history for field: {} in date range", field);
+        switch (field) {
+            case "weight":
+                return bodyMetricRepository.findWeightHistory(currentUserId, startDate, endDate);
+            case "height":
+                return bodyMetricRepository.findHeightHistory(currentUserId, startDate, endDate);
+            case "bodyFatPercentage":
+                return bodyMetricRepository.findBodyFatPercentageHistory(currentUserId, startDate, endDate);
+            case "muscleMass":
+                return bodyMetricRepository.findMuscleMass(currentUserId, startDate, endDate);
+            case "bmi":
+                return bodyMetricRepository.findBMI(currentUserId, startDate, endDate);
+            case "hipCircumference":
+                return bodyMetricRepository.findHipCircumference(currentUserId, startDate, endDate);
+            case "chestMeasurement":
+                return bodyMetricRepository.findChestMeasurement(currentUserId, startDate, endDate);
+            default:
+                return Collections.emptyList();
+        }
+    }
+
+    private boolean isValidField(String field) {
+        if (field == null) {
+            throw new BadRequestException("Field parameter must be present");
+        }
+        List<String> validFields = List.of("weight", "height", "bodyFatPercentage", "muscleMass", "bmi", "hipCircumference", "chestMeasurement");
+        return validFields.contains(field);
     }
 
     private boolean isStartDateAfterEndDate(LocalDateTime startDate, LocalDateTime endDate) {
