@@ -1,14 +1,25 @@
-package com.example.WorkoutTrackingApp.dto;
+package com.example.WorkoutTrackingApp.entity;
 
+import com.example.WorkoutTrackingApp.auth.entity.User;
 import com.example.WorkoutTrackingApp.constants.ValidationMessages;
-import jakarta.validation.Valid;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
-public class BodyMetricsDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "body_metrics")
+public class BodyMetric extends BaseEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private User user;
+
     @NotNull(message = ValidationMessages.WEIGHT_NOT_NULL)
     @Positive(message = ValidationMessages.WEIGHT_POSITIVE)
     private Double weight;
@@ -32,4 +43,5 @@ public class BodyMetricsDTO {
 
     @PositiveOrZero(message = ValidationMessages.CHEST_MEASUREMENT_ZERO_OR_POSITIVE)
     private Double chestMeasurement;
+
 }

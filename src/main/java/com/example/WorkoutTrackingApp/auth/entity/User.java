@@ -2,7 +2,7 @@ package com.example.WorkoutTrackingApp.auth.entity;
 
 import com.example.WorkoutTrackingApp.auth.Enum.Role;
 import com.example.WorkoutTrackingApp.entity.BaseEntity;
-import com.example.WorkoutTrackingApp.entity.BodyMetrics;
+import com.example.WorkoutTrackingApp.entity.BodyMetric;
 import com.example.WorkoutTrackingApp.entity.PersonalRecord;
 import com.example.WorkoutTrackingApp.entity.Workout;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -52,7 +52,7 @@ public class User extends BaseEntity implements UserDetails {
     private List<PersonalRecord> personalRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<BodyMetrics> bodyMetrics = new ArrayList<>();
+    private List<BodyMetric> bodyMetrics = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

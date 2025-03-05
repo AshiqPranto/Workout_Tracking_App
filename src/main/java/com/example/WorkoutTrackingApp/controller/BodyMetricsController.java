@@ -1,8 +1,8 @@
 package com.example.WorkoutTrackingApp.controller;
 
-import com.example.WorkoutTrackingApp.dto.BodyMetricsDTO;
-import com.example.WorkoutTrackingApp.entity.BodyMetrics;
-import com.example.WorkoutTrackingApp.service.BodyMetricsService;
+import com.example.WorkoutTrackingApp.dto.BodyMetricDTO;
+import com.example.WorkoutTrackingApp.entity.BodyMetric;
+import com.example.WorkoutTrackingApp.service.BodyMetricService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,38 +16,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BodyMetricsController {
 
-    private final BodyMetricsService bodyMetricsService;
+    private final BodyMetricService bodyMetricService;
 
     @PostMapping
-    public ResponseEntity<BodyMetrics> createBodyMetrics(@RequestBody BodyMetricsDTO bodyMetricsDTO) {
-        BodyMetrics createdRecord = bodyMetricsService.createBodyMetrics(bodyMetricsDTO);
+    public ResponseEntity<BodyMetric> createBodyMetrics(@RequestBody BodyMetricDTO bodyMetricDTO) {
+        BodyMetric createdRecord = bodyMetricService.createBodyMetric(bodyMetricDTO);
         return ResponseEntity.ok(createdRecord);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BodyMetrics> getBodyMetricsById(@PathVariable Integer id) {
-        BodyMetrics bodyMetrics = bodyMetricsService.getById(id);
-        return new ResponseEntity<>(bodyMetrics, HttpStatus.OK);
+    public ResponseEntity<BodyMetric> getBodyMetricsById(@PathVariable Integer id) {
+        BodyMetric bodyMetric = bodyMetricService.getById(id);
+        return new ResponseEntity<>(bodyMetric, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBodyMetrics(@PathVariable Integer id) {
-        bodyMetricsService.deleteBodyMetrics(id);
+        bodyMetricService.deleteBodyMetric(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/latest")
-    public ResponseEntity<BodyMetrics> getLatestBodyMetrics() {
-        BodyMetrics latestBodyMetrics = bodyMetricsService.getLatestBodyMetrics();
-        return new ResponseEntity<>(latestBodyMetrics, HttpStatus.OK);
+    public ResponseEntity<BodyMetric> getLatestBodyMetrics() {
+        BodyMetric latestBodyMetric = bodyMetricService.getLatestBodyMetric();
+        return new ResponseEntity<>(latestBodyMetric, HttpStatus.OK);
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<BodyMetrics>> getBodyMetricsHistory(
+    public ResponseEntity<List<BodyMetric>> getBodyMetricsHistory(
             @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate
             ) {
 
-        List<BodyMetrics> history = bodyMetricsService.getBodyMetricsHistorybyDateRange(startDate, endDate);
+        List<BodyMetric> history = bodyMetricService.getBodyMetricHistorybyDateRange(startDate, endDate);
         return ResponseEntity.ok(history);
     }
 }
