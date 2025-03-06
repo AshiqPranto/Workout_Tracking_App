@@ -12,12 +12,10 @@ import com.example.WorkoutTrackingApp.repository.BodyMetricRepository;
 import com.example.WorkoutTrackingApp.service.BodyMetricService;
 import com.example.WorkoutTrackingApp.utils.AuthUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Slf4j
@@ -28,6 +26,9 @@ public class BodyMetricServiceImpl implements BodyMetricService {
     private final AuthUtil authUtil;
     private final UserService userService;
     private final BodyMetricMapper bodyMetricMapper = BodyMetricMapper.INSTANCE;
+    private static final Set<String> VALID_FIELDS = new HashSet<>(Arrays.asList(
+            "weight", "height", "bodyFatPercentage", "muscleMass", "bmi", "hipCircumference", "chestMeasurement"
+    ));
 
     public BodyMetricServiceImpl(BodyMetricRepository bodyMetricRepository, AuthUtil authUtil, UserService userService) {
         this.bodyMetricRepository = bodyMetricRepository;
@@ -58,17 +59,8 @@ public class BodyMetricServiceImpl implements BodyMetricService {
         Integer currentUserId = authUtil.getAuthenticatedUserId();
         log.info("Get BodyMetric history by userId: {}", currentUserId);
 
-        if (!isValidField(field)) {
-            throw new BadRequestException("Invalid field requested: " + field);
-        }
-
-        if (isDateRangeAbsent(startDate, endDate)) {
-            throw new BadRequestException("Start date and end date must be include");
-        }
-
-        if(isStartDateAfterEndDate(startDate, endDate)) {
-            throw new BadRequestException("Start date must be before end date");
-        }
+        validateField(field);
+        validateDateRange(startDate, endDate);
 
         log.info("Fetching BodyMetric history for field: {} in date range", field);
         return fetchHistory(currentUserId, field, startDate, endDate);
@@ -96,20 +88,24 @@ public class BodyMetricServiceImpl implements BodyMetricService {
         }
     }
 
-    private boolean isValidField(String field) {
-        if (field == null) {
-            throw new BadRequestException("Field parameter must be present");
+    private void validateField(String field) {
+        if (field == null || field.isBlank()) {
+            throw new BadRequestException("Field parameter is required");
         }
-        List<String> validFields = List.of("weight", "height", "bodyFatPercentage", "muscleMass", "bmi", "hipCircumference", "chestMeasurement");
-        return validFields.contains(field);
+
+        if(!VALID_FIELDS.contains(field)) {
+            throw new BadRequestException("Field parameter is invalid");
+        }
     }
 
-    private boolean isStartDateAfterEndDate(LocalDateTime startDate, LocalDateTime endDate) {
-        return startDate.isAfter(endDate);
-    }
+    private void validateDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        if(startDate == null || endDate == null) {
+            throw new BadRequestException("Both Start date and end date are required");
+        }
 
-    private static boolean isDateRangeAbsent(LocalDateTime startDate, LocalDateTime endDate) {
-        return startDate == null || endDate == null;
+        if(startDate.isAfter(endDate)) {
+            throw new BadRequestException("Start date must be before the end date");
+        }
     }
 
     @Override
@@ -118,7 +114,7 @@ public class BodyMetricServiceImpl implements BodyMetricService {
         log.info("Get Latest BodyMetric by id: {}", currentUserId);
 
         BodyMetric bodyMetric = bodyMetricRepository.findLatestByUserId(currentUserId)
-                .orElseThrow(() -> new ResourceNotFoundException("BodyMetric not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("No BodyMetric records found for the user"));
 
         log.info("Got Latest BodyMetric with id: {}", bodyMetric.getId());
         return bodyMetric;
