@@ -16,10 +16,10 @@ public interface UserService {
 
     boolean checkIfEmailExists(String email);
 
-    User findUserById(Long id);
+    User findUserById(Integer id);
 
-    void deleteUserById(Long id);
+    void deleteUserById(Integer id);
 
-    UserUpdateDto updateUser(Long id, UserUpdateDto userDto);
+    UserUpdateDto updateUser(Integer id, UserUpdateDto userDto);
 }
 
